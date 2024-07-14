@@ -1,0 +1,132 @@
+paths:
+  /api/carts:
+    get:
+      summary: Obtiene todos los carritos de la base de datos.
+      tags:
+        - Api Carts
+      responses:
+        "200":
+          description: La operación fue exitosa, se retornan los carts.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Cart'
+        "400":
+          description: Se envio un dato no esperado.
+        "500":
+          description: Error inesperado en el servidor, no se pudo ejecutar el proceso.
+    post:
+      summary: Crear un nuevo carrito.
+      tags:
+        - Api Carts
+      responses:
+        "200":
+          description: La operación fue exitosa, se crea un nuevo cart.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/NewCart'
+        "400":
+          description: Se envio un dato no esperado.
+        "500":
+          description: Error inesperado en el servidor, no se pudo ejecutar el proceso.
+  /api/carts/{cid}:
+    get:
+      summary: Obtiene un carrito específico según su id.
+      tags:
+        - Api Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: Id del carrito que se desea buscar.
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: La operación fue exitosa, se retorna el cart.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Cart'
+        "400":
+          description: Se envio un dato no esperado.
+        "500":
+          description: Error inesperado en el servidor, no se pudo ejecutar el proceso.
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: Agregamos un producto específico a un carrito específico.
+      tags:
+        - Api Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: Id del carrito al que se desea agregar el producto.
+        schema:
+          type: string
+      - name: pid
+        in: path
+        required: true
+        description: Id del producto que se desea agregar al carrito.
+        schema:
+          type: string
+      responses:
+        "200":
+          description: La operación fue exitosa, se ha agregado el producto al carrito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Cart'
+        "400":
+          description: Se envio un dato no esperado.
+        "500":
+          description: Error inesperado en el servidor, no se pudo ejecutar el proceso.
+
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado de MongoDB.
+        id:
+          type: Number
+          description: Id random asignado al carrito.
+        products:
+          type: Array
+          description: Productos asignados al carrito.
+      example:
+        _id: ObjectId(66397fa5656ee877e2f8162b)
+        id: 7266
+        products: [{
+        "product": "65ed5a133a890cee080fc505",
+        "quantity": 1,
+        "_id": "664eaaf55f415822cb059aa7"
+      }]
+    NewCart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado de MongoDB.
+        id:
+          type: Number
+          description: Id random asignado al carrito.
+        products:
+          type: Array
+          description: Productos asignados al carrito.
+      example:
+        _id: ObjectId(66658069f5ea504fa269a127)
+        id: 9973
+        products: []

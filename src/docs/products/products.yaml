@@ -1,0 +1,167 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtiene todos los productos de la base de datos.
+      tags:
+        - Api Products
+      responses:
+        "200":
+          description: La operación fue exitosa, se retornan los productos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Product'
+        "400":
+          description: Se envio un dato no esperado.
+        "500":
+          description: Error inesperado en el servidor, no se pudo ejecutar el proceso.
+    post:
+      summary: Crear un nuevo producto.
+      tags:
+        - Api Products
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Título del producto.
+                description:
+                  type: string
+                  description: Descripción del producto.
+                code:
+                  type: string
+                  description: Código de registro e identificación del producto.
+                price:
+                  type: number
+                  description: Precio unitario del producto.
+                stock:
+                  type: number
+                  description: Cantidad de piezas disponibles.
+                category:
+                  type: string
+                  description: Categoría a la que pertenece el producto.
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: Archivos de imagen del producto.
+      responses:
+        "201":
+          description: La operación fue exitosa, se crea un nuevo producto.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "400":
+          description: Se envió un dato no esperado.
+        "500":
+          description: Error inesperado en el servidor, no se pudo ejecutar el proceso.
+  /api/products/id/{pid}:
+    get:
+      summary: Obtiene un producto específico según su id.
+      tags:
+        - Api Products
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: Id del producto que se desea buscar.
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: La operación fue exitosa, se retorna el producto.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Product'
+        "400":
+          description: Se envió un dato no esperado.
+        "500":
+          description: Error inesperado en el servidor, no se pudo ejecutar el proceso.
+  /api/products/_id/{p_id}:
+    get:
+      summary: Obtiene un producto específico según su _id.
+      tags:
+        - Api Products
+      parameters:
+      - name: p_id
+        in: path
+        required: true
+        description: _id del producto que se desea buscar.
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: La operación fue exitosa, se retorna el producto.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Product'
+        "400":
+          description: Se envió un dato no esperado.
+        "500":
+          description: Error inesperado en el servidor, no se pudo ejecutar el proceso.
+
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado de MongoDB.
+        id:
+          type: Number
+          description: Id random asignado al producto.
+        title:
+          type: String
+          description: Título del producto.
+        description:
+          type: String
+          description: Descripción del producto.
+        code:
+          type: Number
+          description: Código de registro e identificación del producto.
+        price:
+          type: Number
+          description: Precio unitario del producto.
+        stock:
+          type: Number
+          description: Cantidad de piezas disponibles.
+        category:
+          type: String
+          description: Categoría a la que pertenece el producto.
+        thumbnail:
+          type: Array
+          description: Imagenes muestra del producto.
+        status:
+          type: Boolean
+          description: Disponibilidad del producto.
+        owner:
+          type: String
+          description: Rol del creador del producto.
+      example:
+        _id: ObjectId(665d113a0ccfb7df9a540b59)
+        id: 6892
+        title: Vestido cafe Tommy Hilfiguer
+        description: Vestido largo formal de mangas largas
+        code: VC_TH_03
+        price: 820
+        stock: 3
+        category: playera
+        thumbnail: ["/1717375290031-vestidoCafe_TH.avif"]
+        status: true
+        owner: admin

@@ -1,0 +1,23 @@
+<div class="formsContainer" style="background-color: rgba(128, 128, 128, 0.483)">
+    <h1 style="background-color:black; padding: 2%; color: white">Configuración de Usuarios:</h1>
+    <div style="text-align: center;">
+        <button onclick="getUsers()" style="margin: 1%; padding: .6%; border-radius: 10px; background-color: #f5f5dc; width: 20%; font-size: 14px;">Mostrar Usuarios</button>
+        <br>
+            <input type="text" id="userIdRole" placeholder="_ID del Usuario" style="margin: 1%; padding: .6%; border-radius: 10px;">
+            <select id="newRole" style="margin: 1%; border-radius: 10px;">
+                <option value="user">user</option>
+                <option value="admin">admin</option>
+                <option value="prime">premium</option>
+            </select>
+            <button onclick="changeUserRole()" style="margin: 1%; padding: .6%; border-radius: 10px; background-color: #f5f5dc; width: 20%; font-size: 14px;">Cambiar Rol</button>
+        <br>
+        <input type="text" id="userIdDelete" placeholder="_ID del Usuario" style="margin: 1%; padding: .6%; border-radius: 10px;">
+        <button onclick="deleteUser()" style="margin-top: 1%; margin-bottom: 5%; padding: .6%; border-radius: 10px; background-color: #f5f5dc; width: 20%; font-size: 14px;">Eliminar Usuario</button>
+    </div>
+</div>
+<footer>
+    <img src="/img/footer_PanchoRoss.png" alt="Pancho Ross">
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/js/apiUsers.js"></script> 

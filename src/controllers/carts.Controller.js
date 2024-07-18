@@ -361,7 +361,7 @@ export const purchaseCartController = async (request, response) => {
         if(leftProducts.length === 0){
             return response.send(`Todos los productos fueron procesados correctamente. La compra ha finalizado exitosamente :)`)
         } else{
-            return response.send(`Se ha finalizado la compra del carrito con id=${cartId} :). Los productos que no se pudieron procesar son ${leftProducts}`)
+            return response.send(`Se ha finalizado la compra del carrito con id=${cartId} :). Los id's de los productos que no se pudieron procesar son: ${leftProducts}`)
         }
     } catch (error) {
         request.logger.error(`Ha surgido este error: ${error}`)

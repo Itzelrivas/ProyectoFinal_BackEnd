@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import { addProductToCartBy_IdController, addProductToCartController, createCartsController, deleteProductToCartController, deleteProductUserCartController, deleteProductsCartController, getCarPopController, getCartsController, purchaseCartController, purchaseCartUserController, updateCantProductsController, updateProductsCartController } from '../controllers/carts.Controller.js';
-import { userAuth } from '../../utils.js';
+import { adminAuth, userAuth } from '../../utils.js';
 //Manejo de errores
 import errorHandler from '../services/errors/middlewares/index.js'
 
 const router = Router();
 
 //Ruta que muestra todos mis carritos con population
-router.get('/', getCartsController)
+router.get('/', adminAuth, getCartsController)
 
 //Ruta para crear un nuevo carrito
 router.post('/', createCartsController)
@@ -36,8 +36,8 @@ router.put('/:cid/product/:pid', updateCantProductsController)
 //Ruta que modifica el array completo de products de un carrito específico
 router.put('/:cid', updateProductsCartController)
 
-//Ruta para crear el ticket y finalizar compra
-router.post('/:cid/purchase', purchaseCartController)
+//Ruta para crear el ticket y finalizar compra de un carrito
+router.post('/:cid/purchase', adminAuth, purchaseCartController)
 
 //Ruta para crear el ticket y finalizar la compra del user logueado
 router.post("/purchaseUserCart", purchaseCartUserController)

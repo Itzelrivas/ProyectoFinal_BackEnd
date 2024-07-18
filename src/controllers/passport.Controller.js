@@ -4,14 +4,28 @@ import { initializePassport } from '../services/passport.Service.js';
 import CustomError from '../services/errors/CustomError.js';
 import { loginUserErrorInfoESP, registerUserErrorInfoESP } from '../services/errors/messages/usersErrors.js';
 import NErrors from '../services/errors/errors-enum.js';
-import { verifyEmailService } from '../services/users.Service.js';
+import { timeLogInService, verifyEmailService } from '../services/users.Service.js';
 
 initializePassport()
 
 //Registro de usuario con passport
 export const registerUser = async (req, res, next) => {
-    const { first_name, last_name, email, age, password, role } = req.body; //agregue role
+    //const { first_name, last_name, email, age, password, role } = req.body; //agregue role
+    const { first_name, last_name, email, age, password, role, specialPassword } = req.body;
+    console.log(req.body);
     console.log(req.body)
+
+//chicle y pega
+    // Contraseña especial predefinida (debería almacenarse de manera segura)
+    const specialPasswordCorrectAdmin = '123'; // Cambiar por la contraseña real
+    const specialPasswordCorrectPremium = '321';
+    
+    if ((role === 'admin' && specialPassword !== specialPasswordCorrectAdmin) || (role === 'premium' && specialPassword !== specialPasswordCorrectPremium)) {
+        return res.status(403).send({ status: 'invalidPassword', message: 'Contraseña especial incorrecta.' });
+    }
+    //
+
+
     // Verificar si los campos no están completos para manejar el error
     if (!first_name || !last_name || !email || !age || !password) {
         console.log("2")
@@ -74,7 +88,7 @@ export const loginUser = (request, response, next) => {
         if (!user) {
             return response.status(401).send({ status: "error", error: "El usuario y la contraseña no coinciden!" });
         }
-        request.login(user, (err) => {
+        request.login(user, async (err) => { //estaba sin el async pero no me pfuncionaba lo de prieba 
             if (err) {
                 return next(err);
             }
@@ -83,7 +97,11 @@ export const loginUser = (request, response, next) => {
             request.logger.info(`Usuario encontrado: ${user}`)
 
             //Prueba !!!!
-            user.last_connection = new Date()
+            //user.last_connection = new Date()
+            let emailUser = user.email
+            //request.logger.info(emailUser)
+            let time = new Date()
+            await timeLogInService(emailUser, time)
 
             request.session.user = {
                 name: `${user.first_name} ${user.last_name}`,
@@ -93,6 +111,7 @@ export const loginUser = (request, response, next) => {
                 cart: user.cart,
                 last_connection: user.last_connection
             };
+
             response.send({ status: "success", payload: request.session.user, message: "Primer logueo realizado! :)" });
         });
     })(request, response, next);

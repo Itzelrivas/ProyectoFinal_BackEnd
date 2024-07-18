@@ -279,7 +279,7 @@ export const getProductsPaginatedButton = async (request, response) => {
 export const newProductController = async (request, response) => {
     try {
         let products = await getProductsService()
-        let { title, description, code, price, stock, category, owner } = request.body;
+        let { title, description, code, price, stock, category} = request.body;
 
         //chicle y pega
         price = Number(price);
@@ -292,7 +292,7 @@ export const newProductController = async (request, response) => {
             console.log(typeof price)
             console.log(typeof stock)
             console.log(typeof category)
-            console.log(typeof owner)
+            //console.log(typeof owner)
 
         if(!title || !description || !code || !price || !stock || !category || typeof title !== "string" || typeof description !== "string" || typeof code !== "string" || typeof price !== "number" || typeof stock !== "number" || typeof category !== "string"){
             console.log("hola1")

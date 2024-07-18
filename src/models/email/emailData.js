@@ -58,7 +58,7 @@ export const sendEmail = async (email, ticket) => {
 //Chicle y pega en el service de users
 export const sendDeletionEmail = async (user) => {
     const mailOptions = {
-        from: "Cuenta Inactiva - Proyecto Finsl " + config.email,
+        from: "Cuenta Inactiva - Proyecto Final " + config.email,
         to: user.email,
         subject: 'Cuenta Eliminada por Inactividad',
         text: `Hola ${user.first_name} ${user.last_name},\n\nTu cuenta ha sido eliminada debido a inactividad en los últimos 2 días.\n\nSaludos,\nEquipo de Soporte de Pancho Ross :)`
@@ -76,7 +76,7 @@ export const emailDeleteProduct = async (product) => {
     const mailOptions = {
         from: "Producto Eliminado - Proyecto Final " + config.email,
         to: product.owner.email,
-        subject: 'Cuenta Eliminada por Inactividad',
+        subject: 'Uno de tus productos fue eliminado.',
         text: `Hola ${product.owner.name},\n\n El producto: ${product.title} que tu agregaste, ha sido eliminado de la base de datos de Pancho Ross.\n\nSaludos,\nEquipo de Soporte de Pancho Ross :)`
     };
 

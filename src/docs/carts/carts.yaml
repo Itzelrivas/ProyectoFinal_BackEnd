@@ -3,7 +3,7 @@ paths:
     get:
       summary: Obtiene todos los carritos de la base de datos.
       tags:
-        - Api Carts
+        - Carts
       responses:
         "200":
           description: La operación fue exitosa, se retornan los carts.
@@ -20,7 +20,7 @@ paths:
     post:
       summary: Crear un nuevo carrito.
       tags:
-        - Api Carts
+        - Carts
       responses:
         "200":
           description: La operación fue exitosa, se crea un nuevo cart.
@@ -38,7 +38,7 @@ paths:
     get:
       summary: Obtiene un carrito específico según su id.
       tags:
-        - Api Carts
+        - Carts
       parameters:
       - name: cid
         in: path
@@ -59,11 +59,128 @@ paths:
           description: Se envio un dato no esperado.
         "500":
           description: Error inesperado en el servidor, no se pudo ejecutar el proceso.
+    delete:
+      summary: Elimina todos los productos de un carrito específico mediante su id.
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito del cual se desean eliminar todos los productos.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: La operación fue exitosa, se han eliminado todos los productos del carrito.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Se han eliminado los productos del carrito con id={cartId}"
+        "404":
+          description: El carrito no fue encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "El carrito con id={cartId} no existe."
+        "500":
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "¡Oh oh! Ha surgido un error y no se pudo eliminar los productos del carrito."
+    put:
+      summary: Modifica el array completo de productos de un carrito específico mediante su id.
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito en el que se desea modificar los productos.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProductInCart'
+      responses:
+        "200":
+          description: La operación fue exitosa, se ha modificado el array completo de productos del carrito.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Se ha actualizado los productos del carrito con id={cartId}"
+        "400":
+          description: Se envió un dato no esperado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "Error tratando de actualizar los productos del carrito."
+        "404":
+          description: El carrito no fue encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "El carrito con el id={cartId} no existe."
+        "500":
+          description: Error del servidor.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "¡Oh oh! Ha surgido un error, por lo tanto, no se pudo modificar los productos del carrito con id={cartId}."
   /api/carts/{cid}/product/{pid}:
     post:
       summary: Agregamos un producto específico a un carrito específico.
       tags:
-        - Api Carts
+        - Carts
       parameters:
       - name: cid
         in: path
@@ -90,6 +207,206 @@ paths:
           description: Se envio un dato no esperado.
         "500":
           description: Error inesperado en el servidor, no se pudo ejecutar el proceso.
+    delete:
+      summary: Eliminar una pieza de un producto específico de un carrito específico, mediante sus ID's respectivos.
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito del cual se desea eliminar el producto.
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto que se desea eliminar del carrito.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: La operación fue exitosa, se ha eliminado el producto del carrito.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Se ha eliminado el producto con el id={productId} del carrito con id={cartId}"
+        "404":
+          description: El producto o el carrito no fueron encontrados.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "El producto con id={productId} no existe en el carrito con id={cartId}."
+        "500":
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "¡Oh oh! Ha surgido un error y no se pudo eliminar el producto del carrito."
+    put:
+      summary: Modifica la cantidad de un producto específico en un carrito específico.
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito en el que se desea modificar la cantidad del producto.
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto del cual se desea modificar la cantidad.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+              example: [8]
+      responses:
+        "200":
+          description: La operación fue exitosa, se ha modificado la cantidad del producto en el carrito.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Se ha actualizado la cantidad de ejemplares del producto con el id={productId} en el carrito con id={cartId}"
+        "400":
+          description: Se envió un dato no esperado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "Error tratando de actualizar la cantidad de un producto específico que hay en un carrito."
+        "404":
+          description: El carrito o el producto no fue encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "El carrito con el id={cartId} no existe."
+        "500":
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "¡Oh oh! Ha surgido un error, por lo tanto, no se pudo modificar la cantidad del producto en el carrito."
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Crea un ticket que se manda al correo registrado con el carrito y finaliza la compra de un carrito específico mediante su id.
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito del cual se desea finalizar la compra.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: La operación fue exitosa, se ha finalizado la compra.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Todos los productos fueron procesados correctamente. La compra ha finalizado exitosamente :)"
+                  leftProducts:
+                    type: array
+                    items:
+                      type: string
+                    example: []
+        "400":
+          description: Se envió un dato no esperado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "Error tratando de finalizar la compra del carrito."
+        "404":
+          description: El carrito no fue encontrado o no está asociado a ningún usuario.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "El carrito con id = {cartId} no está asociado a ningún usuario."
+        "500":
+          description: Error del servidor.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "¡Oh oh! Ha surgido un error, por lo tanto, no se pudo finalizar la compra del carrito con id={cartId}."
+
+  
+  
 
 
 components:
@@ -109,11 +426,23 @@ components:
       example:
         _id: ObjectId(66397fa5656ee877e2f8162b)
         id: 7266
-        products: [{
-        "product": "65ed5a133a890cee080fc505",
-        "quantity": 1,
-        "_id": "664eaaf55f415822cb059aa7"
-      }]
+        products: [
+          {
+            "product": "65ed5a133a890cee080fc504",
+            "quantity": 4,
+            "_id": "669707c7a3ae5bc22d9e7289"
+          },
+          {
+            "product": "65ed5a133a890cee080fc503",
+            "quantity": 1,
+            "_id": "669713838781431244c88228"
+          },
+          {
+            "product": "65ed5a133a890cee080fc505",
+            "quantity": 2,
+            "_id": "669713888781431244c88237"
+          }
+        ]
     NewCart:
       type: object
       properties:
@@ -130,3 +459,19 @@ components:
         _id: ObjectId(66658069f5ea504fa269a127)
         id: 9973
         products: []
+    ProductInCart:
+      type: object
+      properties:
+        product:
+          type: string
+          description: _Id del producto.
+        quantity:
+          type: integer
+          description: Cantidad del producto en el carrito.
+        _id:
+          type: string
+          description: _Id del producto en el carrito.
+      example:
+        product: "65ed5a133a890cee080fc505"
+        quantity: 2
+        _id: "664eaaf55f415822cb059aa7"

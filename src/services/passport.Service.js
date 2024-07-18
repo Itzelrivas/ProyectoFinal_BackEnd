@@ -21,7 +21,7 @@ export const initializePassport = () => {
 	passport.use('register', new localStrategy(
 		{ passReqToCallback: true, usernameField: 'email' }, 
 		async (request, username, password, done) => { 
-			const { first_name, last_name, email, age, cart, role } = request.body
+			const { first_name, last_name, email, age, role } = request.body
 
 			try {
 				//Validamos si ya hay un usuario registrado con el mismo correo:
@@ -31,12 +31,12 @@ export const initializePassport = () => {
 					return done(null, false)
 				} else{
                     //Verificamos que exista el carrito asociado segun su id, en caso de tenerlo y si no se crea un nuevo carrito
-                    const cartId = cart//request.body.cart;
-                    console.log('aqui andamos:')
-                    console.log(cartId)
+                    //const cartId = cart//request.body.cart;
+                    //console.log('aqui andamos:')
+                    //console.log(cartId)
                     let idCart
-                    if(/*cartId !== undefined || */cartId){
-                        const cart = await cartsModel.findOne({ id: cartId });
+                    //if(/*cartId !== undefined || */cartId){
+                        /*const cart = await cartsModel.findOne({ id: cartId });
                         if (!cart) {
                             console.log("El carrito no existe!");
                             return done("El carrito no existe!");
@@ -44,7 +44,7 @@ export const initializePassport = () => {
                             idCart = cart._id
                         }
                     }
-                    else{
+                    else{*/
                         const newCart = {
                             products: []
                         };
@@ -52,7 +52,7 @@ export const initializePassport = () => {
                         const cart = await cartsModel.findOne({ id: newCart.id });
                         console.log(createdCart)
                         idCart = cart._id
-                    }
+                    //}
 
                     //Asignamos roles
                     let roleFin 

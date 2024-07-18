@@ -2,6 +2,15 @@ const socket = io();
 let user
 const chat = document.getElementById('messageText')
 
+/*const myEmailElement = document.getElementById('myEmail');
+let user = myEmailElement ? myEmailElement.textContent.trim() : null;
+
+if (user) {
+    socket.emit('userConnected', { user: user });
+}
+
+const chat = document.getElementById('messageText');*/
+
 Swal.fire({
     icon: "info",
     title: "Ingresa tus datos, por favor...",
@@ -53,3 +62,7 @@ closeChatBox.addEventListener('click', evt => {
     socket.emit('closeChat', { close: "close" })
     chatSpace.innerHTML = ''
 })
+
+function goToProducts() {
+    window.location.replace('/handlebars/products');
+}

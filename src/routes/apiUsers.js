@@ -3,7 +3,7 @@ import multer from 'multer';
 import path from 'path';
 import { addFilesController, changeRolController, changeRolGeneralController, deleteInactiveUsersController, deleteUserController, editUsersController, getInactiveUsersController, getUsersController } from '../controllers/users.Controller.js';
 import errorHandler from '../services/errors/middlewares/index.js';
-import __dirname, { auth } from '../../utils.js';
+import __dirname, { adminAuth, premiumUserAuth } from '../../utils.js';
 
 const router = Router();
 
@@ -34,28 +34,29 @@ const upload = multer({ storage });
 
 
 //Accedemos a los users
-router.get("/", auth, getUsersController)
+router.get("/", adminAuth, getUsersController)
 
 //Accedemos a los users inactivos
-router.get("/inactive", getInactiveUsersController)
+router.get("/inactive", adminAuth, getInactiveUsersController)
 
 //Eliminamos de la BD a los usuarios inactivos
-router.delete("/", auth, deleteInactiveUsersController)
+router.delete("/", adminAuth, deleteInactiveUsersController)
 
 //Cambiar el role premium <-> user
-router.get("/premium/:_id", changeRolController)
+router.get("/premium/:_id", premiumUserAuth, changeRolController)
 
-//Ruta para subir archivos a un usuario
+//Ruta para subir archivos a un usuario.
 router.post('/:uid/documents', upload.array('files'), addFilesController);
 
 //Ruta para vista que permite editar usuarios 
-router.get('/edit', auth, editUsersController)
+router.get('/edit', adminAuth, editUsersController)
 
-//Ruta para cambiar a un role especifico un usuario con su _id
-router.post("/changeRole/:uid/:urole", changeRolGeneralController)
+//Ruta para cambiar a un role especifico un usuario con su _id. 
+//AGREGAR EL AUTH PARA SOLO AMDIN
+router.post("/changeRole/:uid/:urole", adminAuth, changeRolGeneralController)
 
 //Ruta que elimina un user mediante el _id
-router.delete("/deleteUser/:uid", deleteUserController)
+router.delete("/deleteUser/:uid", adminAuth, deleteUserController)
 
 
 

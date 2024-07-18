@@ -1,9 +1,9 @@
 paths:
   /api/users:
     get:
-      summary: Obtiene todos los usuarios registrados en la base de datos.
+      summary: Obtiene todos los usuarios registrados en la base de datos. Solo tienen aceso a esta ruta usuarios con role admin o premium.
       tags:
-        - Api Users
+        - Users
       responses:
         "200":
           description: La operacion fue exitosa se retorna un arreglo con los usuarios
@@ -17,6 +17,205 @@ paths:
           description: Se envio un dato no esperado
         "500":
           description: Error inesperado en el server, no se puede manejar el proceso
+    delete:
+      summary: Elimina todos los usuarios que su última conexión fue hace al menos dos días. Solo tienen aceso a esta ruta usuarios con role admin o premium.
+      tags:
+        - Users
+      responses:
+        "200":
+          description: La operacion fue exitosa se retorna la cantidad de usuarios que se eliminaron de la base de datos y al user eliminado le llega un correo avisandole.
+        "400":
+          description: Se envio un dato no esperado
+        "500":
+          description: Error inesperado en el server, no se puede manejar el proceso
+  /api/users/inactive:
+    get:
+      summary: Obtiene todos los usuarios que su última conexión fue hace al menos dos días.
+      tags:
+        - Users
+      responses:
+        "200":
+          description: La operacion fue exitosa se retorna un arreglo con los usuarios inactivos.
+        "400":
+          description: Se envio un dato no esperado.
+        "500":
+          description: Error inesperado en el server, no se puede manejar el proceso.
+  /api/users/premium/{_id}:
+    get:
+      summary: Cambia el role de usuario a premium o de premium a usuario. El role solo cambia a premium si el usuario tiene subidos los papeles correspondientes a Identificación, Comprobante de domicilio y Comprobante de estado de cuenta.
+      tags:
+        - Users
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: _ID del usuario.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: La operación fue exitosa. Se cambió el role del usuario.
+        "400":
+          description: Se envió un dato no esperado.
+        "404":
+          description: Usuario no encontrado.
+        "500":
+          description: Error inesperado en el servidor, no se puede manejar el proceso.
+  /api/users/{uid}/documents:
+    post:
+      summary: Sube archivos a un usuario específico mediante su _id.
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: _ID del usuario.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: Archivos a subir.
+              required:
+                - files
+      responses:
+        '200':
+          description: Archivos subidos y usuario actualizado exitosamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Archivos subidos y usuario actualizado exitosamente"
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "¡Oh oh! Ha surgido un error y no se pudo subir los archivos al usuario."
+  /api/users/changeRole/{uid}/{urole}:
+    post:
+      summary: Cambia el rol de un usuario específico mediante su _id.
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: _ID del usuario.
+          schema:
+            type: string
+        - name: urole
+          in: path
+          required: true
+          description: Nuevo rol del usuario. Puede ser user, admin o premium.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El rol del usuario ha sido actualizado exitosamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "El role del usuario con _id: {userId} ahora es {userRole}"
+        '404':
+          description: Usuario no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "El usuario con _id {userId} no se ha encontrado."
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "¡Oh oh! Ha surgido un error y no se pudieron cambiar los roles de los usuarios."
+  /api/users/deleteUser/{uid}:
+    delete:
+      summary: Elimina un usuario de la base de datos utilizando su _ID.
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: _ID del usuario.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El usuario ha sido eliminado exitosamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "El usuario con _id: {userId} ha sido eliminado."
+        '404':
+          description: Usuario no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "El usuario con _id {userId} no se ha encontrado."
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "¡Oh oh! Ha surgido un error y no se pudo eliminar el usuario."
 
 
 components:

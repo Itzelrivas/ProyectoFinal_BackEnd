@@ -23,7 +23,7 @@ function purchaseCart() {
             // Mostrar la segunda alerta después de la primera
             Swal.fire({
                 title: 'Actualización de stock',
-                text: 'Algunos productos en tu carrito no están en stock y por lo tanto, no se pudo finalizar su compra y permanecen en tu carrito.',
+                text: 'Puede que algunos productos en tu carrito no esten en stock y por lo tanto, no se pudo finalizar su compra y permanecen en tu carrito.',
                 icon: 'warning',
                 confirmButtonText: 'OK'
             }).then(() => {

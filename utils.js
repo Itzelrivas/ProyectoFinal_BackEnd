@@ -42,35 +42,87 @@ export const isValidPassword = (user, password) => { //Va a validar que mi hash 
 }
 
 
-//Para manejo de Auth.
-export const auth = (request, response, next) => {
+//Auth de role ADMIN.
+export const adminAuth = (request, response, next) => {
 	//const userRol = rolCurrentUser
-	const userRol = request.session.user.role
-	console.log(userRol)
-	if(!userRol){
-		response.status(403).send('Para poder acceder a esta función es necesario que primero inicies sesión.');
+	const user = request.session.user
+	if(!user){
+		return response.status(403).send('Para poder acceder a esta función es necesario que primero inicies sesión.');
 	}
-    else if (userRol === 'admin' || userRol === 'premium') {
+	const userRol = request.session.user.role
+	request.logger.info(userRol)
+    if (userRol === 'admin' /*|| userRol === 'premium'*/) {
         next(); // Si el usuario es administrador o premium, permite que continúe con la solicitud
     } else {
-        response.status(403).send('Acceso denegado. Debes tener role de admin o premium para realizar esta acción.');
+        response.status(403).send('Acceso denegado. Debes tener role de admin para realizar esta acción.');
     }
 };
 
-//Identificador de users
+//Auth de role USER.
 export const userAuth = (request, response, next) => {
-	const userRol = request.session.user.role
-	console.log(userRol)
-	if(!userRol){
-		response.status(403).send('Para poder acceder a esta función es necesario que primero inicies sesión.');
+	const user = request.session.user
+	if(!user){
+		return response.status(403).send('Para poder acceder a esta función es necesario que primero inicies sesión.');
 	}
-    else if (userRol === 'user') {
+	const userRol = request.session.user.role
+	request.logger.info(userRol)
+	if (userRol === 'user') {
         next(); // Si el usuario es user, permite que continúe con la solicitud
     } else {
 		console.log("Debes tener un rol de user para poder agregar productos a tu carrito.")
         response.status(403).send('Acceso denegado. Debes tener rol de user para realizar esta acción.');
     }
 };
+
+//Auth de role PREMIUM.
+export const premiumAuth = (request, response, next) => {
+	//const userRol = rolCurrentUser
+	const user = request.session.user
+	if(!user){
+		return response.status(403).send('Para poder acceder a esta función es necesario que primero inicies sesión.');
+	}
+	const userRol = request.session.user.role
+	request.logger.info(userRol)
+	if (userRol === 'premium' /*|| userRol === 'premium'*/) {
+        next(); // Si el usuario es premium, permite que continúe con la solicitud
+    } else {
+        response.status(403).send('Acceso denegado. Debes tener role premium para realizar esta acción.');
+    }
+};
+
+//Auth role PREMIUM O USER
+export const premiumUserAuth = (request, response, next) => {
+	//const userRol = rolCurrentUser
+	const user = request.session.user
+	if(!user){
+		return response.status(403).send('Para poder acceder a esta función es necesario que primero inicies sesión.');
+	}
+    const userRol = request.session.user.role
+	request.logger.info(userRol)
+	if (userRol === 'user' || userRol === 'premium') {
+        next(); // Si el usuario es premium, permite que continúe con la solicitud
+    } else {
+        response.status(403).send('Acceso denegado. Debes tener role premium o user para realizar esta acción.');
+    }
+};
+
+//Auth role PREMIUM O ADMIN
+export const premiumAdminAuth = (request, response, next) => {
+	//const userRol = rolCurrentUser
+	//const userRol = request.session.user.role
+	const user = request.session.user
+	if(!user){
+		return response.status(403).send('Para poder acceder a esta función es necesario que primero inicies sesión.');
+	}
+	const userRol = request.session.user.role
+	request.logger.info(userRol)
+    if (userRol === 'admin' || userRol === 'premium') {
+        next(); // Si el usuario es premium o user, permite que continúe con la solicitud
+    } else {
+        response.status(403).send('Acceso denegado. Debes tener role premium o admin para realizar esta acción.');
+    }
+};
+
 
 //Mocking de products
 faker.locale = 'es'; //Idioma de los datos. 

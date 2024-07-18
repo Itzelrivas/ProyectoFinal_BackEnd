@@ -3,7 +3,7 @@ paths:
     get:
       summary: Obtiene todos los productos de la base de datos.
       tags:
-        - Api Products
+        - Products
       responses:
         "200":
           description: La operación fue exitosa, se retornan los productos.
@@ -20,7 +20,7 @@ paths:
     post:
       summary: Crear un nuevo producto.
       tags:
-        - Api Products
+        - Products
       requestBody:
         required: true
         content:
@@ -67,7 +67,7 @@ paths:
     get:
       summary: Obtiene un producto específico según su id.
       tags:
-        - Api Products
+        - Products
       parameters:
       - name: pid
         in: path
@@ -92,7 +92,7 @@ paths:
     get:
       summary: Obtiene un producto específico según su _id.
       tags:
-        - Api Products
+        - Products
       parameters:
       - name: p_id
         in: path
@@ -113,6 +113,115 @@ paths:
           description: Se envió un dato no esperado.
         "500":
           description: Error inesperado en el servidor, no se pudo ejecutar el proceso.
+  /api/products/{pid}:
+    put:
+      summary: Actualiza toda la información de un producto específico según su id.
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto que se desea actualizar.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Título del producto.
+                description:
+                  type: string
+                  description: Descripción del producto.
+                code:
+                  type: string
+                  description: Código de registro e identificación del producto.
+                price:
+                  type: number
+                  description: Precio unitario del producto.
+                stock:
+                  type: number
+                  description: Cantidad de piezas disponibles.
+                category:
+                  type: string
+                  description: Categoría a la que pertenece el producto.
+                thumbnail:
+                  type: array
+                  items:
+                    type: string
+                    description: URLs de las imágenes del producto.
+      responses:
+        "200":
+          description: La operación fue exitosa, se ha actualizado el producto.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "400":
+          description: Se envió un dato no esperado.
+        "404":
+          description: No se encontró el producto con el id especificado.
+        "500":
+          description: Error inesperado en el servidor, no se pudo ejecutar el proceso.
+    delete:
+      summary: Elimina un producto específico mediante su id. Si el owner del producto tenia un role premium, se le avisará mediante un correo la situación.
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto que se desea eliminar.
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: La operación fue exitosa, el producto ha sido eliminado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Success
+                  message:
+                    type: string
+                    example: El producto con id=123 ha sido eliminado.
+        "202":
+          description: No se ha encontrado el producto.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: info
+                  error:
+                    type: string
+                    example: No se ha encontrado ningún producto con id=123.
+        "500":
+          description: Error inesperado en el servidor, no se pudo eliminar el producto.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: ¡oh oh! El producto con id=123 no se pudo borrar.
+
 
 
 components:
@@ -151,8 +260,20 @@ components:
           type: Boolean
           description: Disponibilidad del producto.
         owner:
-          type: String
-          description: Rol del creador del producto.
+          type: object
+          properties:
+            name:
+              type: string
+              description: Nombre del creador del producto.
+            email:
+              type: string
+              description: Correo electrónico del creador del producto.
+            role:
+              type: string
+              enum:
+                - admin
+                - premium
+              description: Rol del creador del producto.
       example:
         _id: ObjectId(665d113a0ccfb7df9a540b59)
         id: 6892
@@ -164,4 +285,7 @@ components:
         category: playera
         thumbnail: ["/1717375290031-vestidoCafe_TH.avif"]
         status: true
-        owner: admin
+        owner: 
+          name: "Itzel Rivas"
+          email: "itzelTest@example.com"
+          role: "premium"

@@ -111,3 +111,7 @@ function logout() {
 function userCart() {
     window.location.href = '/handlebars/cartUser';
 }
+
+function chat(){
+    window.location.href = '/handlebars/messages';
+}

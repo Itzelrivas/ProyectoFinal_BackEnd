@@ -6,7 +6,7 @@ import MongoStore from 'connect-mongo';
 //Importamos utils, socket y mongoose
 import __dirname from '../utils.js';
 import { Server } from 'socket.io';
-import mongoose from 'mongoose';
+//import mongoose from 'mongoose'; //no estaba comentada antes
 //importamos mis archivos de routes
 import productsRoutes from './routes/products.router.js'
 import cartsRoutes from './routes/carts.router.js'

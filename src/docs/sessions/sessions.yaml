@@ -1,0 +1,189 @@
+paths:
+  /api/sessions/login:
+    post:
+      summary: Inicio sesión de usuario mediante su email y su contraseña.
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "usuario@example.com"
+                password:
+                  type: string
+                  example: "password123"
+      responses:
+        '200':
+          description: Inicio de sesión exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  payload:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: "Juan Perez"
+                      email:
+                        type: string
+                        example: "usuario@example.com"
+                      age:
+                        type: integer
+                        example: 30
+                      role:
+                        type: string
+                        example: "user"
+                      cart:
+                        type: string
+                        example: "cart_id"
+                      last_connection:
+                        type: string
+                        format: date-time
+                        example: "2024-07-15T14:48:00.000Z"
+                  message:
+                    type: string
+                    example: "Primer logueo realizado! :)"
+        '401':
+          description: Error de autenticación
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  error:
+                    type: string
+                    example: "El usuario y la contraseña no coinciden!"
+        '400':
+          description: Campos incompletos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  error:
+                    type: string
+                    example: "Campos incompletos"
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  error:
+                    type: string
+                    example: "Error interno del servidor"
+  /api/sessions/register:
+    post:
+      summary: Registrar un nuevo usuario solicitando el nombre, apellido, correo, edad, contraseña y role del usuario.
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+      responses:
+        '200':
+          description: Registro exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  message:
+                    type: string
+                    example: "Usuario creado de forma exitosa!!"
+        '400':
+          description: Campos incompletos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  error:
+                    type: string
+                    example: "Campos incompletos"
+        '409':
+          description: El correo ya está registrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "noSuccess"
+                  message:
+                    type: string
+                    example: "Usuario no creado porque el correo ya ha sido utilizado anteriormente :("
+        '500':
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "Error al intentar registrar un nuevo usuario."
+
+components:
+  schemas:
+    UserRegister:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: Nombre del usuario
+        last_name:
+          type: string
+          description: Apellido del usuario
+        email:
+          type: string
+          description: Email del usuario
+        age:
+          type: integer
+          description: Edad del usuario.
+        password:
+          type: string
+          description: Contraseña del usuario.
+        role:
+          type: string
+          description: Rol del usuario (user, admin, premium)
+      example:
+        first_name: Usuario newUser
+        last_name: Apellido newUser
+        email: correoUserNuevo@gmail.com
+        age: 25
+        password: password123
+        role: user

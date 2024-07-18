@@ -1,6 +1,11 @@
 <div class="chat">
-    <h2 class="titleChat">Chat en tiempo real</h2>
+    <div style="background-color: black;">
+        <h2 class="titleChat">Chat en tiempo real</h2>
+        <button class="buttonProducts" onclick="goToProducts()"><b>Ver Productos</b></button>
+    </div>
+    <!--<h2 class="titleChat">Chat en tiempo real</h2>-->
     <h3>Has ingresado con el correo: <span id="myEmail"></span></h3>
+    <!--<h3>Has ingresado con el correo: <span id="myEmail">{{email}}</span></h3>-->
 
     <div class="sentMessages">
         <p>Escribe el mensaje que deseas enviar: <input id="messageText" type="text"></p>
@@ -12,6 +17,9 @@
         <p id="chatSpace" class="chatMessages"></p>
     </div>
 </div>
+<footer>
+    <img src="/img/footer_PanchoRoss.png" alt="Pancho Ross">
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/socket.io/socket.io.js"></script>

@@ -29,6 +29,7 @@ export default {
     secret: process.env.SESSIONS_SECRET,
     email: process.env.GMAIL_ACCOUNT,
     appEmailPass: process.env.GMAIL_APP_PASSWORD,
+    mongoTest: process.env.MONGO_URL_TEST,
     environment: environment,
     useMongo: program.opts().mongo
 };

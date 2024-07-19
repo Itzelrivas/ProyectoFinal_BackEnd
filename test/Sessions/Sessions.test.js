@@ -1,8 +1,9 @@
 import chai from 'chai';
 import supertest from 'supertest';
+import config from '../../src/config/config.js';
 
 const expect = chai.expect;
-const requester = supertest('http://localhost:9090');
+const requester = supertest(`http://localhost:${config.port}`);
 
 //mongoose.connect(`mongodb+srv://Itzelrivas0803:R1v450803@cluster0.zqvjwvn.mongodb.net/ecommerce-test?retryWrites=true&w=majority&appName=Cluster0`)
 
@@ -11,12 +12,13 @@ describe("Testing sessions y cookies", () => {
     before(function () {
         this.cookie;
         this.mockUser = {
-            first_name: "Itzel",
-            last_name: "Rivas",
-            email: "testEmail@prueba.com",
-            age: 17,
+            first_name: "Test",
+            last_name: "Sessions",
+            email: "testingEmail@pruebaSessions.com",
+            age: 176,
             password: "123",
-            role: 'admin'
+            role: 'premium',
+            specialPassword: '321'
         }
     })
 

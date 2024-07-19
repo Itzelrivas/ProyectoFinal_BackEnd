@@ -184,7 +184,7 @@ export const addFilesController = async (request, response) => {
 export const getUsersController = async (request, response) => {
     try {
         const users = await getUsersService()
-        return response.send(users)
+        return response.status(201).send(users)
     } catch (error) {
         request.logger.error(`Ha surgido este error: ${error}`)
         response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error y no se pudo acceder a los usuarios.</h2>');
@@ -195,7 +195,7 @@ export const getUsersController = async (request, response) => {
 export const getInactiveUsersController = async (request, response) => {
     try {
         const users = await getInactiveUsersService();
-        return response.send(users);
+        return response.status(201).send(users);
     } catch (error) {
         request.logger.error(`Ha surgido este error: ${error}`);
         response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error y no se pudo acceder a los usuarios inactivos.</h2>');

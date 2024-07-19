@@ -5,6 +5,9 @@ import bcrypt from 'bcrypt'
 import { rolCurrentUser } from './src/services/passport.Service.js'
 import { faker } from '@faker-js/faker'
 
+//chicle y oega
+import config from './src/config/config.js';
+
 const __filename = fileURLToPath(import.meta.url) //Esto es para trabajaro con rutas absolutas
 const __dirname = dirname(__filename)
 
@@ -107,6 +110,7 @@ export const premiumUserAuth = (request, response, next) => {
 };
 
 //Auth role PREMIUM O ADMIN
+//este si funcionaaa
 export const premiumAdminAuth = (request, response, next) => {
 	//const userRol = rolCurrentUser
 	//const userRol = request.session.user.role
@@ -122,6 +126,31 @@ export const premiumAdminAuth = (request, response, next) => {
         response.status(403).send('Acceso denegado. Debes tener role premium o admin para realizar esta acción.');
     }
 };
+/*export const premiumAdminAuth = (request, response, next) => {
+    const authHeader = request.headers.authorization;
+    let user;
+
+    if (authHeader) {
+        const token = authHeader.split(' ')[1];
+
+        try {
+            user = jwt.verify(token, config.secret);
+        } catch (error) {
+            return response.status(403).send('Token inválido.');
+        }
+    } else if (request.session && request.session.user) {
+        user = request.session.user;
+    } else {
+        return response.status(403).send('Para poder acceder a esta función es necesario que primero inicies sesión.');
+    }
+
+    if (user.role === 'admin' || user.role === 'premium') {
+        request.user = user;
+        return next();
+    } else {
+        return response.status(403).send('Acceso denegado. Debes tener role premium o admin para realizar esta acción.');
+    }
+};*/
 
 
 //Mocking de products

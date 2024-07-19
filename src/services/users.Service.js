@@ -86,7 +86,9 @@ export const updatePasswordService = async (user_id, newPassword) => {
 
 //Mandamos el correo para actualizar la contraseña
 export const sendEmailPasswordService = async (email) => {
-    return await sendEmailPassword(email)
+    //return await sendEmailPassword(email)
+    await sendEmailPassword(email)
+    return true;
 }
 
 //Comparamos las contraseñas

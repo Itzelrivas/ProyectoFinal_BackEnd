@@ -1,15 +1,16 @@
 import mongoose from "mongoose";
 import chai from "chai";
-import { getProductsService, newProductService } from "../../src/services/products.Service.js";
+import { deleteProductService, getProductIdService, getProduct_IdService, getProductsService, newProductService, updateProductService } from "../../src/services/products.Service.js";
+import config from "../../src/config/config.js";
 
-mongoose.connect(`mongodb+srv://Itzelrivas0803:R1v450803@cluster0.zqvjwvn.mongodb.net/ecommerce-test?retryWrites=true&w=majority&appName=Cluster0`)
+mongoose.connect(config.mongoTest)
 
 const expect = chai.expect;
 
 describe('Testing Products Service', () => {
 
     before(async function () {
-        this.timeout(5000); // Incrementa el tiempo de espera si es necesario
+        this.timeout(5000); 
         await mongoose.connection.once('open', () => {
             console.log('Connected to MongoDB');
         });
@@ -22,13 +23,13 @@ describe('Testing Products Service', () => {
 
     //Test 1
     it('El servicio debe devolver los productos en formato de arreglo.', async function () {
-        // Given
+        //Given
         let emptyArray = [];
 
-        // Then
+        //Then
         const result = await getProductsService();
 
-        // Assert 
+        //Assert 
         console.log(result);
         expect(result).to.be.deep.equal(emptyArray);
         expect(Array.isArray(result)).to.be.ok;
@@ -40,14 +41,19 @@ describe('Testing Products Service', () => {
     it('El service debe agregar producto correctamente a la BD.', async function () {
         //Given 
         const productMock = {
-            owner: "admin",
+            owner: {
+                name: "test",
+                email: "test@algo.com",
+                role: "admin"
+            },
             title: "Vestido negro Guess",
             description: "Vestido con cuello cruzado y con tela brillante",
             code: "VNB_G_02",
             price: 900,
             stock: 2,
             category: "vestido",
-            thumbnail: './test/files/vestidoNegro-G.jpeg'
+            thumbnail: './test/files/vestidoNegro-G.jpeg',
+            id:4321
         }
 
         //Then
@@ -55,5 +61,130 @@ describe('Testing Products Service', () => {
 
         //Assert 
         expect(result._id).to.be.ok;
+    });
+
+    //Test 3
+    it('El service debe devolver un producto específico según su id.', async function () {
+        //Given
+        const productMock = {
+            owner: {
+                name: "test",
+                email: "test@algo.com",
+                role: "admin"
+            },
+            title: "Vestido negro Guess",
+            description: "Vestido con cuello cruzado y con tela brillante",
+            code: "VNB_G_02",
+            price: 900,
+            stock: 2,
+            category: "vestido",
+            thumbnail: './test/files/vestidoNegro-G.jpeg',
+            id:4321
+        };
+
+        //Then
+        const insertedProduct = await newProductService(productMock);
+        const result = await getProductIdService(insertedProduct.id);
+
+        //Assert
+        expect(result.id.toString()).to.equal(insertedProduct.id.toString());
+    });
+
+    //Test 4
+    it('El service debe devolver un producto específico según su _id.', async function () {
+        const productMock = {
+            owner: {
+                name: "test",
+                email: "test@algo.com",
+                role: "admin"
+            },
+            title: "Vestido negro Guess",
+            description: "Vestido con cuello cruzado y con tela brillante",
+            code: "VNB_G_02",
+            price: 900,
+            stock: 2,
+            category: "vestido",
+            thumbnail: './test/files/vestidoNegro-G.jpeg',
+            id:4321
+        };
+        const insertedProduct = await newProductService(productMock);
+        const result = await getProduct_IdService(insertedProduct._id);
+        expect(result._id.toString()).to.equal(insertedProduct._id.toString());
+    });
+
+    //Test 5
+    it('El service debe actualizar un producto específico.', async function () {
+        //Given
+        const productMock = {
+            owner: {
+                name: "test",
+                email: "test@algo.com",
+                role: "admin"
+            },
+            title: "Vestido negro Guess",
+            description: "Vestido con cuello cruzado y con tela brillante",
+            code: "VNB_G_02",
+            price: 900,
+            stock: 2,
+            category: "vestido",
+            thumbnail: './test/files/vestidoNegro-G.jpeg',
+            id:4321
+        };
+
+        //Then
+        const insertedProduct = await newProductService(productMock);
+        const updateData = { 
+            owner: {
+                name: "test",
+                email: "test@algo.com",
+                role: "admin"
+            },
+            title: "Vestido negro Guess",
+            description: "Vestido con cuello cruzado y con tela brillante",
+            code: "VNB_G_03",
+            price: 1200,
+            stock: 3,
+            category: "vestido",
+            thumbnail: './test/files/vestidoNegro-G.jpeg',
+            id:4321
+        }; 
+        await updateProductService(insertedProduct.id, updateData);
+        const updatedProduct = await getProductIdService(insertedProduct.id);
+
+        //Assert
+        expect(updatedProduct.price).to.equal(updateData.price);
+    });
+
+    //Test 6
+    it('El servicio debe eliminar un producto correctamente de la BD.', async function () {
+        //Given
+        const productMock = {
+            owner: {
+                name: "test",
+                email: "test@algo.com",
+                role: "admin"
+            },
+            title: "Vestido negro Guess",
+            description: "Vestido con cuello cruzado y con tela brillante",
+            code: "VNB_G_03",
+            price: 1200,
+            stock: 3,
+            category: "vestido",
+            thumbnail: './test/files/vestidoNegro-G.jpeg',
+            id:4321
+        };
+
+        //Then
+        const createdProduct = await newProductService(productMock);
+
+        //Verificamos que el producto se ha creado correctamente
+        const productFromDb = await getProductIdService(createdProduct.id.toString());
+        expect(productFromDb).to.not.be.null;
+
+        await deleteProductService(createdProduct.id.toString());
+        const deletedProduct = await getProductIdService(createdProduct.id.toString());
+
+        //Assert
+        expect(deletedProduct).to.be.null;
     });
 });

@@ -117,7 +117,7 @@ export const addProductToCartController = async (request, response) => {
         // Actualizar el carrito en la base de datos
         await addProductToCartService(cartId, productId)
     
-        return response.send(`Se ha agregado el producto con el id=${productId} al carrito con id=${cartId}`);
+        return response.status(200).send(`Se ha agregado el producto con el id=${productId} al carrito con id=${cartId}`);
     } catch (error) {
         //console.error(error)
         request.logger.error(`Ha surgido este error: ${error}`)
@@ -358,10 +358,11 @@ export const purchaseCartController = async (request, response) => {
             return response.send(`El carrito con id = ${cartId} no esta asociado a ningún usuario.`);
         }
         let leftProducts = await purchaseCartService(cartId, email)
-        if(leftProducts.length === 0){
+        if(leftProducts.result.length === 0){
             return response.send(`Todos los productos fueron procesados correctamente. La compra ha finalizado exitosamente :)`)
         } else{
-            return response.send(`Se ha finalizado la compra del carrito con id=${cartId} :). Los id's de los productos que no se pudieron procesar son: ${leftProducts}`)
+            //console.log(leftProducts.result.length)
+            return response.send(`Se ha finalizado la compra del carrito con id=${cartId} :). Los id's de los productos que no se pudieron procesar son: ${leftProducts.result}`)
         }
     } catch (error) {
         request.logger.error(`Ha surgido este error: ${error}`)
@@ -423,9 +424,9 @@ export const purchaseCartUserController = async (request, response) => {
         }
         let leftProducts = await purchaseCartService(cartId, email)
         if(leftProducts.length === 0){
-            return response.send(`Todos los productos fueron procesados correctamente. La compra ha finalizado exitosamente :)`)
-        } else{
-            return response.send(`Se ha finalizado la compra del carrito con id=${cartId} :). Los productos que no se pudieron procesar son ${leftProducts}`)
+            return response.status(201).send(`Todos los productos fueron procesados correctamente. La compra ha finalizado exitosamente :)`)
+        } else{//no estaba el status 201 ni arriba ni abajo, solo en el catch
+            return response.status(201).send(`Se ha finalizado la compra del carrito con id=${cartId} :). Los productos que no se pudieron procesar son ${leftProducts}`)
         }
     } catch (error) {
         request.logger.error(`Ha surgido este error: ${error}`)

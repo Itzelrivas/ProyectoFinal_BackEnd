@@ -55,4 +55,10 @@ describe("Testing sessions y cookies", () => {
         expect(this.cookie.value).to.be.ok
     })
 
+    //Test 3: logOut
+    it("Test Logout Usuario: Debe poder hacer logout correctamente", async function () {
+        const result = await requester.get('/api/sessions/logout')
+
+        expect(result.status).to.equal(201);
+    });
 });

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { githubCallbackController, loginGitHub, loginUser, registerUser } from '../controllers/passport.Controller.js';
-import { failLogin, failRegister } from '../controllers/users.Controller.js';
+import { failLogin, failRegister, justLogout } from '../controllers/users.Controller.js';
 import errorHandler from '../services/errors/middlewares/index.js'
 
 const router = Router();
@@ -16,6 +16,9 @@ router.post("/register", registerUser);
 
 //Ruta users/login para loguear usuarios (POST)
 router.post("/login", loginUser);
+
+//Ruta users/logout para cerrar sesión, pero no redirecciona a ningún lado
+router.get("/logout", justLogout)
 
 router.get("/fail-register", failRegister)
 

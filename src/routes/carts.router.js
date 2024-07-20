@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { addProductToCartBy_IdController, addProductToCartController, createCartsController, deleteProductToCartController, deleteProductUserCartController, deleteProductsCartController, getCarPopController, getCartsController, purchaseCartController, purchaseCartUserController, updateCantProductsController, updateProductsCartController } from '../controllers/carts.Controller.js';
-import { adminAuth, userAuth } from '../../utils.js';
+import { adminAuth, premiumUserAuth, userAuth } from '../../utils.js';
 //Manejo de errores
 import errorHandler from '../services/errors/middlewares/index.js'
 
@@ -18,8 +18,8 @@ router.get('/:cid', getCarPopController)
 //Ruta que agrega un producto especifico a un carrito específico
 router.post('/:cid/product/:pid', addProductToCartController)
 
-//Ruta que agrega un producto específico al carrito del user logueado solamente si tiene rol de user
-router.post('/addProduct/:p_id', userAuth, addProductToCartBy_IdController)
+//Ruta que agrega un producto específico al carrito del user logueado solamente si tiene rol de user o premium
+router.post('/addProduct/:p_id', premiumUserAuth, addProductToCartBy_IdController)
 
 //Ruta que elimina un producto especifico de un carrito específico
 router.delete('/:cid/product/:pid', deleteProductToCartController)

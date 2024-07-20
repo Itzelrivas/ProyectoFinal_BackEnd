@@ -69,8 +69,23 @@ export const logout = async (request, response) => {
         if (error){
             response.json({error: "error logout", mensaje: "Error al cerrar la sesion"});
         }
-        response.redirect('/users/login');
+        response.status(201).redirect('/users/login');//no tenia el 201 lo del status
     });   
+}
+
+//chicle y pega
+export const justLogout = async (request, response) => {
+    try {
+        request.session.destroy(error => {
+            if (error){
+                response.json({error: "error logout", mensaje: "Error al cerrar la sesion"});
+            }
+            response.status(201).send("LogOut exitoso :)")//no tenia el 201 lo del status
+        }); 
+    } catch (error) {
+        request.logger.error(`Ha surgido este error: ${error}`)
+        response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error y no se pudo completar el logOut.</h2>');
+    }
 }
 
 //Actualizamos la contraseña

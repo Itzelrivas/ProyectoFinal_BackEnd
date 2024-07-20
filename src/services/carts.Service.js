@@ -71,5 +71,11 @@ export const updateProductsCartService = async (cartId, newProducts) => {
 
 //Finalizamos la compra y generamos el ticket
 export const purchaseCartService = async (cid, email) => {
-    return await purchaseCart(cid, email)
+    //return await purchaseCart(cid, email)
+    const result = await purchaseCart(cid, email)
+    return {
+        success: true,
+        message: "Compra finalizada exitosamente",
+        result
+    };
 }

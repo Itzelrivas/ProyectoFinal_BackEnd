@@ -1,3 +1,4 @@
+<!--Esta vista nos muestra todos los productos-->
 {{#if result}}
     <div>
         {{#if user}}
@@ -28,7 +29,6 @@
                     <h3>Categoría: {{this.category}}</h3>
                     <h3>Piezas disponibles: {{this.stock}}</h3>
                     <h3>Precio: ${{this.price}}</h3>
-                    <!--con esto se comenta -->
                     {{#each this.thumbnail}}
                         <img style="width: 20%;" src="/img/{{this}}" alt="{{../title}}"></img>
                     {{/each}}

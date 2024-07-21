@@ -4,7 +4,6 @@ console.log(form)
 //form.addEventListener('submit', e => {
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    //console.log("holaaa")
     const data = new FormData(form)
     const obj = {}
     data.forEach((value, key) => obj[key] = value);
@@ -76,7 +75,7 @@ form.addEventListener('submit', async (e) => {
                 window.location.replace('/users/login');
             });
         } else if(result.status === 'noSuccess'){
-            // Si la respuesta no es exitosa, muestra un alert de error
+            //Si la respuesta no es exitosa, muestra un alert de error
             Swal.fire({
                 title: 'Error',
                 text: 'El correo ya esta registrado con otro usuario :(',

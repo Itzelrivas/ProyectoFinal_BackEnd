@@ -1,3 +1,4 @@
+<!--Esta vista se muestra cuando el token que genera la ruta para reestablecer la contraseña se vence, y podemos crear uno nuevo.-->
 <div class="formsContainer" style="background-image: url('/img/fondoGeneral_PanchoRoss.png');">
     <h2 style="background-color: rgb(142, 8, 8); padding: 1.5%; color: white; text-align:center">¡Este link ha expirado!</h2>
     <p style="text-align: center; background-color: rgba(255, 223, 174, 0.716); margin-left: 5%; margin-right: 5%;">El tiempo de válidez de este link ha terminado. Si quieres que te llegue un nuevo link para reestablecer la contraseña, realiza lo siguiente:</p>
@@ -18,7 +19,7 @@
 
 <script>
 document.getElementById('sendNewLinkButton').addEventListener('click', async function(event) {
-    event.preventDefault(); // Prevenir el envío predeterminado del formulario
+    event.preventDefault(); 
     const email = document.getElementById('emailInput').value;
     const responseMessage = document.getElementById('responseMessage');
 

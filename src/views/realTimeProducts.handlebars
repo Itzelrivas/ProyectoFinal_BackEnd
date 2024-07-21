@@ -1,6 +1,7 @@
+<!--Esta vista nos muestra todos los productos en tiempo real-->
 <h1 style="background-color: beige; padding: 2%">Todos los productos:</h1>
 <h4 style="background-color: rgb(11, 119, 117); padding: .5%; color: white">Actualizados en tiempo real...</h4>
-<div id="productContainer">
+<div id="productContainer" style="background-image: url('/img/fondoGeneral_PanchoRoss.png')">
     {{#each products}}
     <div class="containerRealTime">
         <h2 style="color: beige">{{this.title}}</h2>
@@ -17,6 +18,9 @@
     </div>
     {{/each}}
 </div>
+<footer>
+    <img src="/img/footer_PanchoRoss.png" alt="Pancho Ross">
+</footer>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/realTimeProducts.js"></script> 

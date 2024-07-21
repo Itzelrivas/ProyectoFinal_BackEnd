@@ -7,13 +7,12 @@ import __dirname, { adminAuth, premiumUserAuth } from '../../utils.js';
 
 const router = Router();
 
-// Configuración de Multer para guardar archivos en diferentes carpetas
+//Configuración de Multer para guardar archivos en diferentes carpetas
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         let uploadPath = '';
         const fileNameWithoutExt = path.parse(file.originalname).name
-        //console.log(fileNameWithoutExt)
-        // Determinar la carpeta de destino según el tipo de archivo
+        //Determinamos la carpeta de destino según el tipo de archivo
         if (fileNameWithoutExt === 'profileImage') {
             uploadPath = path.join(`${__dirname}/src/public/uploads/profiles`);
         } else if (fileNameWithoutExt === 'productImage') {

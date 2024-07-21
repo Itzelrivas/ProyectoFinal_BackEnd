@@ -1,5 +1,4 @@
 function addToCart(productId) {
-    // Realiza una solicitud POST para agregar el producto al carrito
     fetch(`/api/carts/addProduct/${productId}`, {
         method: 'POST',
     })
@@ -11,7 +10,7 @@ function addToCart(productId) {
     })
     .then(message => {
         console.log(message)
-        // Si la respuesta es "Producto agregado", muestra el mensaje
+        //Si la respuesta es "Producto agregado", muestra el mensaje
         if (message === 'Producto agregado') {
             console.log('Producto agregado al carrito');
             Swal.fire({
@@ -21,8 +20,7 @@ function addToCart(productId) {
                 timer: 2000, 
                 showConfirmButton: false
             });
-        } else { //hasta aqui es la rpueba 
-            // Si la respuesta es diferente, muestra el mensaje de error
+        } else {
             console.error('No se pudo agregar el producto al carrito:', message);
             Swal.fire({
                 icon: 'error',
@@ -32,7 +30,7 @@ function addToCart(productId) {
         }
     })
     .catch(error => {
-        //console.error('Error al agregar el producto al carrito:', error);
+        //Si no hay acceso por el role
         Swal.fire({
             icon: 'error',
             title: 'Acceso denegado',
@@ -42,89 +40,22 @@ function addToCart(productId) {
     });
 }
 
-
-
-/*function addToCart(productId) {
-    // Realiza una solicitud GET para obtener la información del producto
-    fetch(`/api/products/_id/${productId}`, {
-        method: 'GET',
-    })
-    .then(response => {
-        console.log(response)
-        if (response.ok) {
-            console.log(response.json)
-            return response.json();
-        }
-        throw new Error('Error al obtener la información del producto');
-    })
-    .then(product => {
-        // Verifica si el stock del producto es 0
-        if (product.stock === 0) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Sin stock',
-                text: 'Este producto no tiene stock disponible.',
-                timer: 2000, 
-                showConfirmButton: false
-            });
-        } else {
-            // Realiza una solicitud POST para agregar el producto al carrito
-            return fetch(`/api/carts/addProduct/${productId}`, {
-                method: 'POST',
-            });
-        }
-    })
-    .then(response => {
-        console.log(response)
-        if (response && response.ok) {
-            return response.text();
-        }
-        throw new Error('Error al agregar el producto al carrito');
-    })
-    .then(message => {
-        // Si la respuesta es "Producto agregado", muestra el mensaje
-        if (message === 'Producto agregado') {
-            console.log('Producto agregado al carrito');
-            Swal.fire({
-                icon: 'success',
-                title: 'Producto agregado',
-                text: 'El producto ha sido agregado al carrito.',
-                timer: 2000, 
-                showConfirmButton: false
-            });
-        } else {
-            // Si la respuesta es diferente, muestra el mensaje de error
-            console.error('No se pudo agregar el producto al carrito:', message);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'No se pudo agregar el producto al carrito.'
-            });
-        }
-    })
-    .catch(error => {
-        console.error('Error al agregar el producto al carrito:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Hubo un error al procesar tu solicitud.'
-        });
-    });
-}*/
-
-
+//Función para cerrar sesión
 function logout() {
     window.location.href = '/users/logout';
 }
 
+//Función para acceder al carrito del usuario con sus productos agregados
 function userCart() {
     window.location.href = '/handlebars/cartUser';
 }
 
+//Función para acceder al chat
 function chat(){
     window.location.href = '/handlebars/messages';
 }
 
+//Función para que los admisn puedan acceder a una handlebar donde se editen los users
 function editUsers(){
     window.location.href = '/api/users/edit';
 }

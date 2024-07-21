@@ -11,7 +11,6 @@ const transporter = nodemailer.createTransport({
     }
 })
 
-//Verificamos que los datos que estoy pasando a Nodemailer estan ok
 transporter.verify(function (error, success) {
     if (error) {
         console.log(error);
@@ -20,10 +19,9 @@ transporter.verify(function (error, success) {
     }
 })
 
-
+//Correo que envía el ticket cuando se finaliza la compra
 export const sendEmail = async (email, ticket) => {
     try {
-        //Generamos el contenido del correo electrónico con los detalles del ticket
         const mailContent = `
             <div>
                 <h3>¡Gracias por tu compra!</h3>
@@ -47,7 +45,6 @@ export const sendEmail = async (email, ticket) => {
             attachments: []
         };
         
-        // Envía el correo electrónico
         await transporter.sendMail(mailOptions);
         console.log('Correo electrónico enviado correctamente a ' + email);
     } catch (error) {
@@ -55,7 +52,7 @@ export const sendEmail = async (email, ticket) => {
     }
 };
 
-//Chicle y pega en el service de users
+//Correo que se envía cuando se eliminó una cuenta por inactividad
 export const sendDeletionEmail = async (user) => {
     const mailOptions = {
         from: "Cuenta Inactiva - Proyecto Final " + config.email,
@@ -71,7 +68,7 @@ export const sendDeletionEmail = async (user) => {
     }
 };
 
-//Eliminamos un producto creado por un usuario premium
+//Correo que se envía cuando eliminamos un producto creado por un usuario con role premium
 export const emailDeleteProduct = async (product) => {
     const mailOptions = {
         from: "Producto Eliminado - Proyecto Final " + config.email,
@@ -79,7 +76,6 @@ export const emailDeleteProduct = async (product) => {
         subject: 'Uno de tus productos fue eliminado.',
         text: `Hola ${product.owner.name},\n\n El producto: ${product.title} que tu agregaste, ha sido eliminado de la base de datos de Pancho Ross.\n\nSaludos,\nEquipo de Soporte de Pancho Ross :)`
     };
-
     try {
         await transporter.sendMail(mailOptions);
     } catch (error) {

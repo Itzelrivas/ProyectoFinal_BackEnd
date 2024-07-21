@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
     }
 })
 
-//Verificamos que los datos que estoy pasando a Nodemailer estan ok
+//Verificamos que los datos que estoy pasando a Nodemailer estan bien
 transporter.verify(function (error, success) {
     if (error) {
         console.log(error);
@@ -55,13 +55,9 @@ export const sendEmailPassword = async (email) => {
     }
 };
 
-
 //Actualizamos la contraseña
 export const updatePassword = async (user_id, newPassword) => {
     try {
-        console.log('Actualizamos la contraseña para el usuario con _id:', user_id);
-        console.log('Nueva Contraseña:', newPassword);
-
         //Obtenemos el usuario por su ID
         const user = await userModel.findById(user_id);
 
@@ -85,9 +81,9 @@ export const updatePassword = async (user_id, newPassword) => {
     }
 }
 
+//Comparamos la nueva contraseña con la contraeña anterior
 export const comparePassword = async (newPassword, user_id) => {
     try {
-         //Comparamos la nueva contraseña con la contraseña actual
          const user = await userModel.findById(user_id);
          const isSamePassword = await bcrypt.compare(newPassword, user.password);
          return isSamePassword

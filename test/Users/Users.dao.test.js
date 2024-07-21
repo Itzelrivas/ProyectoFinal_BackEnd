@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import config from "../../src/config/config.js";
 import { changeRolGeneralService, changeRolService, deleteUserService, getUser_IdService, registerUser, sendEmailPasswordService, updatePasswordService, verifyEmailService } from "../../src/services/users.Service.js";
 
+//Base de datos para testing
 mongoose.connect(config.mongoTest)
 
 const expect = chai.expect;
@@ -20,12 +21,7 @@ describe('Testing Users Services', () => {
         await mongoose.connection.collections.users.drop();
     });
 
-    /*beforeEach(async function () {
-        this.timeout(5000);
-        await mongoose.connection.collections.users.drop();
-    });*/
-
-    //Test 1
+    //Test 1: agregamos un nuevo user a la base de datos
     it('El service debe agregar un nuevo usuario correctamente a la BD.', async function () {
         //Given 
         const newUser = {
@@ -89,13 +85,14 @@ describe('Testing Users Services', () => {
 
     //Test 4: Enviar correo para restablecer contraseña
     it('El service debe enviar un correo para restablecer la contraseña.', async function () {
-        this.timeout(5000);//se me esta crasheando por el tiempo de espera
+        this.timeout(5000);
         // Given
         const email = "i.canorivas@ugto.mx";
 
         //Then
         const result = await sendEmailPasswordService(email);
         console.log(result)
+        
         //Assert
         expect(result).to.be.true;
     });

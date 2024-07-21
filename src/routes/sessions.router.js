@@ -20,8 +20,10 @@ router.post("/login", loginUser);
 //Ruta users/logout para cerrar sesión, pero no redirecciona a ningún lado
 router.get("/logout", justLogout)
 
+//Ruta cuando el registro no es éxitoso
 router.get("/fail-register", failRegister)
 
+//Ruta cuando el logIn no es éxitoso
 router.get("/fail-login", failLogin)
 
 //Middleware para el manejo de errores

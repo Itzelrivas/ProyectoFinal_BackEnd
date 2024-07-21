@@ -5,8 +5,6 @@ import config from '../../src/config/config.js';
 const expect = chai.expect;
 const requester = supertest(`http://localhost:${config.port}`);
 
-//mongoose.connect(`mongodb+srv://Itzelrivas0803:R1v450803@cluster0.zqvjwvn.mongodb.net/ecommerce-test?retryWrites=true&w=majority&appName=Cluster0`)
-
 describe("Testing sessions y cookies", () => {
 
     before(function () {
@@ -22,8 +20,8 @@ describe("Testing sessions y cookies", () => {
         }
     })
 
-     // Test_01
-     it("Test Registro Usuario: Debe poder registrar correctamente un usuario",async function () {
+     // Test 1: registramos un nuevo usuario
+     it("Test Registro Usuario: Debe poder registrar correctamente un usuario", async function () {
         //Then
         const result = await requester.post('/api/sessions/register').send(this.mockUser)
         
@@ -31,7 +29,7 @@ describe("Testing sessions y cookies", () => {
         expect(result.status).to.equal(200);
     })
 
-    //Test 2
+    //Test 2: Logueamos un usuario
     it("Test Login Usuario: Debe poder hacer login correctamente con el usuario registrado previamente.", async function () {
         // Given
         const mockLogin = {

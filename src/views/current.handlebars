@@ -1,7 +1,10 @@
 <!--Esta vista es para mostrar los datos del user autenticado-->
 <div>
-    <h1 style="background-color: rgb(198, 224, 254); padding: 0.5%">Datos del usuario...</h1>
-    <div style="text-align: center; background-color: antiquewhite; padding: 1%; color: rgb(168, 69, 69);">
+    <div style="background-color: black;">
+        <h1 style="padding: 0.5%; color: rgb(198, 224, 254); margin-bottom: 0%;">Datos del usuario...</h1>
+        <button class="buttonCart" onclick="products()" style="margin-left: 7%; margin-bottom: 1%;"><b>Productos</b></button>
+    </div>
+    <div style="text-align: center; background-color: rgb(198, 224, 254); padding: 1%; color: rgb(177, 159, 135);">
         {{#if user}}
             <h3><b>Nombre:</b> {{user.name}} </h3>
             <h3><b>Correo:</b> {{user.email}}</h3>
@@ -15,10 +18,17 @@
         {{/if}}
     </div>
 </div>
+<footer>
+    <img src="/img/footer_PanchoRoss.png" alt="Pancho Ross">
+</footer>
 
 <!--No hice un archivo js porque es muy poquito código :)-->
 <script>
     function sesion() {
         window.location.href = '/users/login';
+    }
+
+    function products(){
+        window.location.href = '/handlebars/products';
     }
 </script>

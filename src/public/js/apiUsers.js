@@ -36,8 +36,6 @@ async function changeUserRole() {
             method: 'POST'
         });
 
-        console.log(response)
-
         if (!response.ok) {
             throw new Error('No se pudo cambiar el rol del usuario.');
         }

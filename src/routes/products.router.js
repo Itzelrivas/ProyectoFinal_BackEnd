@@ -16,7 +16,6 @@ router.get('/_id/:p_id', getProduct_IdController)
 
 //Ruta para agregar un producto. Funciona con Moongose :)
 router.post('/', premiumAdminAuth, uploader.array('files'), newProductController)
-//router.post('/', uploader.array('files'), newProductController) //con este si funcionan los tests
 
 //Ruta para actualizar un producto. Funciona con Moongose :)
 router.put('/:pid', premiumAdminAuth, updateProductController)

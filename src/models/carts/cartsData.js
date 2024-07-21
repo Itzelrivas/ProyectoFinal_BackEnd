@@ -222,5 +222,3 @@ export const purchaseCart = async (id, email) =>{
         return error;
     }
 }
-
-//Nos quedamos aqui intentando cambiar los console.log's por loggers

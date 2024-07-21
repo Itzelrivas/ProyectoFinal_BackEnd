@@ -1,3 +1,4 @@
+//Función para finalizar la compra del carrito del user logueado
 function purchaseCart() {
     fetch('/api/carts/purchaseUserCart', {
         method: 'POST',
@@ -5,7 +6,6 @@ function purchaseCart() {
             'Content-Type': 'application/json'
         }
     })
-    //.then(response => response.text())
     .then(response => {
         if (response.ok) {
             return response.text();
@@ -18,20 +18,13 @@ function purchaseCart() {
         }
     })
     .then(data => {
-        // Mostrar mensaje de confirmación usando SweetAlert
-        /*Swal.fire({
-            title: 'Compra finalizada',
-            text: 'Se ha enviado un correo con los detalles de la compra.',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        })*/
         Swal.fire({
             title: 'Compra finalizada',
             text: 'Se ha enviado un correo con los detalles de la compra.',
             icon: 'success',
             confirmButtonText: 'OK'
         }).then(() => {
-            // Mostrar la segunda alerta después de la primera
+            // Mostrar la segunda alerta después de la primera con los productos no en stock.
             Swal.fire({
                 title: 'Actualización de stock',
                 text: 'Puede que algunos productos en tu carrito no esten en stock y por lo tanto, no se pudo finalizar su compra y permanecen en tu carrito.',
@@ -55,11 +48,12 @@ function purchaseCart() {
     });
 }
 
+//Función para ver los productos
 function goToProducts() {
     window.location.replace('/handlebars/products');
 }
 
-
+//Función para reducir 1 la cantidad de un producto en el carrito del user logueado
 function reduceQuantity(productId, currentQuantity) {
     Swal.fire({
         title: '¿Estás seguro?',
@@ -72,7 +66,6 @@ function reduceQuantity(productId, currentQuantity) {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            // Hacer la solicitud PUT para reducir la cantidad
             fetch(`/api/carts/cartUser/${productId}`, {
                 method: 'DELETE',
                 headers: {
@@ -108,5 +101,3 @@ function reduceQuantity(productId, currentQuantity) {
     });
 }
 
-//Falta actualizar el carrito al finalizar la compra : ✅ 
-//Si despues de que se finalice la compre, quedan piezas en el cart, que aparezca un alert que diga que las piezas que quedan no estan en stock, : ✅ 

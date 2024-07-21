@@ -132,16 +132,16 @@ export const getUsers = async () => {
 export const getInactiveUsers = async () => {
     try {
         //Calculamos la fecha de hace dos días
-        /*const twoDaysAgo = new Date();
+        const twoDaysAgo = new Date();
         twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
         //Buscamos usuarios cuya last_connection es anterior a hace dos días
-        let users = await userModel.find({ last_connection: { $lt: twoDaysAgo } });*/
+        let users = await userModel.find({ last_connection: { $lt: twoDaysAgo } });
 
 
         //Prueba dos minutos
-        const halfHourAgo = new Date();
+        /*const halfHourAgo = new Date();
         halfHourAgo.setMinutes(halfHourAgo.getMinutes() - 2);
-        let users = await userModel.find({ last_connection: { $lt: halfHourAgo } });
+        let users = await userModel.find({ last_connection: { $lt: halfHourAgo } });*/
 
         return users;
     } catch (error) {
@@ -154,18 +154,18 @@ export const getInactiveUsers = async () => {
 export const deleteInactiveUsers = async () => {
     try {
         //Funciona con los dos días
-        /*const twoDaysAgo = new Date();
+        const twoDaysAgo = new Date();
         twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
         const usersToDelete = await userModel.find({ last_connection: { $lt: twoDaysAgo } });
         await userModel.deleteMany({ last_connection: { $lt: twoDaysAgo } });
-        return usersToDelete;*/
+        return usersToDelete;
 
         //Prueba con 2 minutos
-        const halfHourAgo = new Date();
+        /*const halfHourAgo = new Date();
         halfHourAgo.setMinutes(halfHourAgo.getMinutes() - 2);
         const usersToDelete = await userModel.find({ last_connection: { $lt: halfHourAgo } });
         await userModel.deleteMany({ last_connection: { $lt: halfHourAgo } });
-        return usersToDelete;
+        return usersToDelete;*/
         
     } catch (error) {
         console.error("Ha surgido este error en models de users: " + error);

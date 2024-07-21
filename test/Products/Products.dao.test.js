@@ -3,6 +3,7 @@ import chai from "chai";
 import { deleteProductService, getProductIdService, getProduct_IdService, getProductsService, newProductService, updateProductService } from "../../src/services/products.Service.js";
 import config from "../../src/config/config.js";
 
+//Base de datos para testing
 mongoose.connect(config.mongoTest)
 
 const expect = chai.expect;
@@ -21,7 +22,7 @@ describe('Testing Products Service', () => {
         await mongoose.connection.collections.products.drop();
     });
 
-    //Test 1
+    //Test 1: nos devuelve los productos
     it('El servicio debe devolver los productos en formato de arreglo.', async function () {
         //Given
         let emptyArray = [];
@@ -37,7 +38,7 @@ describe('Testing Products Service', () => {
         expect(result.length).to.be.deep.equal(emptyArray.length);
     });
 
-    //Test 2
+    //Test 2: agrega productos a la base de datos
     it('El service debe agregar producto correctamente a la BD.', async function () {
         //Given 
         const productMock = {
@@ -63,7 +64,7 @@ describe('Testing Products Service', () => {
         expect(result._id).to.be.ok;
     });
 
-    //Test 3
+    //Test 3: nos devuelve un producto específico según su id.
     it('El service debe devolver un producto específico según su id.', async function () {
         //Given
         const productMock = {
@@ -90,8 +91,9 @@ describe('Testing Products Service', () => {
         expect(result.id.toString()).to.equal(insertedProduct.id.toString());
     });
 
-    //Test 4
+    //Test 4: nos devuelve un producto específico según su _id.
     it('El service debe devolver un producto específico según su _id.', async function () {
+        //Given
         const productMock = {
             owner: {
                 name: "test",
@@ -107,12 +109,16 @@ describe('Testing Products Service', () => {
             thumbnail: './test/files/vestidoNegro-G.jpeg',
             id:4321
         };
+
+        //Then
         const insertedProduct = await newProductService(productMock);
         const result = await getProduct_IdService(insertedProduct._id);
+
+        //Assert
         expect(result._id.toString()).to.equal(insertedProduct._id.toString());
     });
 
-    //Test 5
+    //Test 5: actualiza un producto específico
     it('El service debe actualizar un producto específico.', async function () {
         //Given
         const productMock = {
@@ -155,7 +161,7 @@ describe('Testing Products Service', () => {
         expect(updatedProduct.price).to.equal(updateData.price);
     });
 
-    //Test 6
+    //Test 6: eliminamos un producto de la base de datos
     it('El servicio debe eliminar un producto correctamente de la BD.', async function () {
         //Given
         const productMock = {

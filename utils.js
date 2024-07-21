@@ -2,11 +2,7 @@ import { fileURLToPath } from 'url'
 import { dirname } from 'path' //Devuelve el nombre del directorio, es decir, la ruta absoluta
 import multer from 'multer'
 import bcrypt from 'bcrypt'
-import { rolCurrentUser } from './src/services/passport.Service.js'
 import { faker } from '@faker-js/faker'
-
-//chicle y oega
-import config from './src/config/config.js';
 
 const __filename = fileURLToPath(import.meta.url) //Esto es para trabajaro con rutas absolutas
 const __dirname = dirname(__filename)
@@ -25,7 +21,6 @@ const storage = multer.diskStorage({
 	}
 })
 
-
 //Lo exportamos:
 export const uploader = multer({
 	storage, 
@@ -35,6 +30,7 @@ export const uploader = multer({
 		next()
 	}
 })
+
 
 //Bcrypt
 export const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10)) //Generamos el hash, que es con lo que se va encriptar mi contraseña
@@ -47,14 +43,13 @@ export const isValidPassword = (user, password) => { //Va a validar que mi hash 
 
 //Auth de role ADMIN.
 export const adminAuth = (request, response, next) => {
-	//const userRol = rolCurrentUser
 	const user = request.session.user
 	if(!user){
 		return response.status(403).send('Para poder acceder a esta función es necesario que primero inicies sesión.');
 	}
 	const userRol = request.session.user.role
 	request.logger.info(userRol)
-    if (userRol === 'admin' /*|| userRol === 'premium'*/) {
+    if (userRol === 'admin') {
         next(); // Si el usuario es administrador o premium, permite que continúe con la solicitud
     } else {
         response.status(403).send('Acceso denegado. Debes tener role de admin para realizar esta acción.');
@@ -79,14 +74,13 @@ export const userAuth = (request, response, next) => {
 
 //Auth de role PREMIUM.
 export const premiumAuth = (request, response, next) => {
-	//const userRol = rolCurrentUser
 	const user = request.session.user
 	if(!user){
 		return response.status(403).send('Para poder acceder a esta función es necesario que primero inicies sesión.');
 	}
 	const userRol = request.session.user.role
 	request.logger.info(userRol)
-	if (userRol === 'premium' /*|| userRol === 'premium'*/) {
+	if (userRol === 'premium') {
         next(); // Si el usuario es premium, permite que continúe con la solicitud
     } else {
         response.status(403).send('Acceso denegado. Debes tener role premium para realizar esta acción.');
@@ -95,7 +89,6 @@ export const premiumAuth = (request, response, next) => {
 
 //Auth role PREMIUM O USER
 export const premiumUserAuth = (request, response, next) => {
-	//const userRol = rolCurrentUser
 	const user = request.session.user
 	if(!user){
 		return response.status(403).send('Para poder acceder a esta función es necesario que primero inicies sesión.');
@@ -112,10 +105,7 @@ export const premiumUserAuth = (request, response, next) => {
 };
 
 //Auth role PREMIUM O ADMIN
-//este si funcionaaa
 export const premiumAdminAuth = (request, response, next) => {
-	//const userRol = rolCurrentUser
-	//const userRol = request.session.user.role
 	const user = request.session.user
 	if(!user){
 		return response.status(403).send('Para poder acceder a esta función es necesario que primero inicies sesión.');
@@ -128,31 +118,6 @@ export const premiumAdminAuth = (request, response, next) => {
         response.status(403).send('Acceso denegado. Debes tener role premium o admin para realizar esta acción.');
     }
 };
-/*export const premiumAdminAuth = (request, response, next) => {
-    const authHeader = request.headers.authorization;
-    let user;
-
-    if (authHeader) {
-        const token = authHeader.split(' ')[1];
-
-        try {
-            user = jwt.verify(token, config.secret);
-        } catch (error) {
-            return response.status(403).send('Token inválido.');
-        }
-    } else if (request.session && request.session.user) {
-        user = request.session.user;
-    } else {
-        return response.status(403).send('Para poder acceder a esta función es necesario que primero inicies sesión.');
-    }
-
-    if (user.role === 'admin' || user.role === 'premium') {
-        request.user = user;
-        return next();
-    } else {
-        return response.status(403).send('Acceso denegado. Debes tener role premium o admin para realizar esta acción.');
-    }
-};*/
 
 
 //Mocking de products

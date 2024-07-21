@@ -18,7 +18,4 @@ router.get("/current", getInfoUser);
 //Ruta para destruir la sesión 
 router.get("/logout", logout)
 
-//Cambiar el role
-//router.get("/premium/:_id", changeRolController)
-
 export default router;

@@ -6,7 +6,6 @@ import MongoStore from 'connect-mongo';
 //Importamos utils, socket y mongoose
 import __dirname from '../utils.js';
 import { Server } from 'socket.io';
-//import mongoose from 'mongoose'; //no estaba comentada antes
 //importamos mis archivos de routes
 import productsRoutes from './routes/products.router.js'
 import cartsRoutes from './routes/carts.router.js'
@@ -43,19 +42,8 @@ app.engine('handlebars', handlebars.engine());
 app.set('view engine', 'handlebars');
 app.set('views', __dirname + "/src/views");
 
-//chicle y pega para un boton
-// Registro del helper ifEquals
-/*const hbs = create({
-    defaultLayout: 'main',
-    helpers: {
-        ifEquals: function (arg1, arg2, options) {
-            return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
-        }
-    }
-});*/
-
 // Indicamos que vamos a trabajar con archivos estaticos
-app.use(express.static(__dirname + "/src/public"))//Antes solo estaba /public
+app.use(express.static(__dirname + "/src/public"))
 
 //Configuración para documentación
 const swaggerOptions = {
@@ -75,20 +63,8 @@ app.use('/apidocs', swaggerUIExpress.serve, swaggerUIExpress.setup(specs))
 
 // Conexión con Mongo mediante una flag
 if (config.useMongo) {
-	//Configuración y conexión con Mongo
+	
     const URL_MONGO = config.mongoUrl;
-
-    /*const connectMongoDB = async () => {
-        try {
-            await mongoose.connect(URL_MONGO);
-            console.log("Conexión exitosa a MongoDB");
-        } catch (error) {
-            console.error("No se pudo conectar a la base de datos usando Mongoose debido a: " + error);
-            process.exit(1); // Sale con un código de error
-        }
-    }
-
-    connectMongoDB();*/
 
     //Conexión a la BD con singleton
     const mongoInstance = async () => {
@@ -101,23 +77,21 @@ if (config.useMongo) {
     }
     mongoInstance();
 
-
 	//Configuración de sesiones
 	app.use(session({
 		store: MongoStore.create ({
 			mongoUrl: URL_MONGO,
-			//mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true }, las eliminamos porque están obsoletas y no tienen efecto en la versión que tengo de mongo
 			ttl: 10 * 60
 		}),
 		secret: config.secret,
 		resave: false, //guarda en memoria
-		saveUninitialized: true //lo guarda a penas se crea. Estaba en true pero las sessions no me funcionan
+		saveUninitialized: true 
 	}))
 
 
 } else {
     console.error("Argumento '--mongo' no encontrado en el comando");
-    process.exit(1); // Sale con un código de error
+    process.exit(1); 
 }
 
 

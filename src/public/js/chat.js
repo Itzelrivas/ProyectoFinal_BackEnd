@@ -2,15 +2,6 @@ const socket = io();
 let user
 const chat = document.getElementById('messageText')
 
-/*const myEmailElement = document.getElementById('myEmail');
-let user = myEmailElement ? myEmailElement.textContent.trim() : null;
-
-if (user) {
-    socket.emit('userConnected', { user: user });
-}
-
-const chat = document.getElementById('messageText');*/
-
 Swal.fire({
     icon: "info",
     title: "Ingresa tus datos, por favor...",
@@ -45,7 +36,7 @@ chat.addEventListener('keyup', event => {
     }
 })
 
-// Escuchamos a todos los usuarios que estan conectados
+//Escuchamos a todos los usuarios que estan conectados
 socket.on('messageLogs', data => {
     const messageLogs = document.getElementById('chatSpace')
     let logs = '';
@@ -55,7 +46,7 @@ socket.on('messageLogs', data => {
     chatSpace.innerHTML = logs
 })
 
-// cerramos el chat
+//Cerramos el chat
 const closeChatBox = document.getElementById('closeChat');
 closeChatBox.addEventListener('click', evt => {
     alert("Gracias por usar este chat, Adios!!")
@@ -63,6 +54,7 @@ closeChatBox.addEventListener('click', evt => {
     chatSpace.innerHTML = ''
 })
 
+//Función para ver los productos
 function goToProducts() {
     window.location.replace('/handlebars/products');
 }

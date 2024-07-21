@@ -17,11 +17,7 @@ describe("Test Userss", () => {
 
     describe("Testing Users Api", () => {
 
-        //beforeEach((done) => {
         before((done) => {
-            /*token = jwt.sign(userPayload, secretKey, { expiresIn: '1h' });
-            console.log('Generated token:', token);
-            done();*/
             requester
                 .post('/api/sessions/login')
                 .send({
@@ -30,12 +26,10 @@ describe("Test Userss", () => {
                 })
                 .end((err, res) => {
                     if (err) return done(err);
-                    //nuevo
                     sessionCookie = res.headers['set-cookie'].pop().split(';')[0];
                     done();
                 });
         });
-
 
         //Test 1: accedemos a los users
         it("Accedemos a los usuarios: El API GET /api/users debe mostrar los usuarios regustrados en la base de datos. Esta funcion solo esta disponible para usuarios logueados con user admin.", async () => {

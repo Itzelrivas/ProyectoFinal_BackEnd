@@ -199,7 +199,7 @@ describe('Testing Carts Service', () => {
         const createdCart = await createCartService(cart);
         await addProductToCartService(createdCart.id, productId);
 
-        const email = 'itzelrivas38@outlook.com';
+        const email = 'i.canorivas@ugto.mx';
 
         //Then
         const result = await purchaseCartService(createdCart.id, email);

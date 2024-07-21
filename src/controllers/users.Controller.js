@@ -1,5 +1,6 @@
 import config from "../config/config.js"
 import { updatePassword } from "../models/password/getNewPassword.js";
+import { deleteCartService } from "../services/carts.Service.js";
 import { changeRolGeneralService, changeRolService, comparePasswordService, deleteInactiveUsersService, deleteUserService, documentsUserService, getCartUserService, getInactiveUsersService, getUser_IdService, getUsersService, sendEmailPasswordService, timeLogInService, uploadFilesService, verifyEmailService } from "../services/users.Service.js"
 import jwt from 'jsonwebtoken';
 
@@ -86,7 +87,6 @@ export const updatePasswordController = async (req, res) => {
     //Token generado
     const { token } = req.params;
 
-    //Verificamos el token
     try {
         const decoded = jwt.verify(token, config.secret);
         const userId = decoded.userId;
@@ -118,7 +118,7 @@ export const updatePasswordController = async (req, res) => {
     }
 };
 
-//Mandamos el correo para actualizar la contraseña
+//Mandamos un correo con un token para actualizar la contraseña a un email específico
 export const sendEmailPasswordController = async (request, response) => {
     try {
         const email = request.params.email
@@ -250,7 +250,9 @@ export const deleteUserController = async (request, response) => {
             request.logger.error(`El usuario con _id ${userId} no esta en la BD.`);
             return response.status(404).send(`El usuario con el _id ${_id} no se ha encontrado.`);
         }
+        let cart = user.cart
         await deleteUserService(userId)
+        await deleteCartService(cart)
         return response.status(200).send(`El usuario con _id: ${userId} ha sido eliminado.`);
     } catch (error) {
         request.logger.error(`Error al eliminar un usuario: ${error}`);

@@ -12,7 +12,7 @@ initializePassport()
 //Registro de usuario con passport
 export const registerUser = async (req, res, next) => {
     const { first_name, last_name, email, age, password, role, specialPassword } = req.body;
-    req.logger.debug(req.body)
+    req.logger.debug(JSON.stringify(req.body, null, 2))
 
     //Contraseña especial predefinida para poder registrarse con ese role
     const specialPasswordCorrectAdmin = config.passwordAdmin 

@@ -2,6 +2,7 @@ import { cartsModel } from "./carts.model.js";
 import { productsModel } from "../products/products.model.js";
 import { getTicket } from "../ticket/ticketsData.js";
 import { sendEmail } from "../email/emailData.js";
+import { userModel } from "../users/user.model.js";
 
 const carts = cartsModel.find()
 
@@ -211,12 +212,34 @@ export const purchaseCart = async (id, email) =>{
                 productsLeft.push(idProduct)
             }
         }
+
+        //Descuento a users premium
+        const user = await userModel.findOne({email: email})
+        if(user.role === 'premium'){
+            amount = amount*0.9
+        }
  
         const ticket = await getTicket(amount, email)
         //Mandamos el ticket al email del usuario
         await sendEmail(email, ticket)
         return productsLeft;
 
+    } catch (error) {
+        console.error("Ha surgido este error en models de cart: " + error);
+        return error;
+    }
+}
+
+//Eliminamos un cart de la base de datos
+export const deleteCart = async (cart_id) => {
+    try {
+        const result = await cartsModel.findOneAndDelete({_id: cart_id});
+        
+        if (!result) {
+            throw new Error(`Carrito con _id = ${cart_id} no encontrado.`);
+        }
+        
+        return { success: true, message: `Carrito con _id ${cart_id} eliminado exitosamente.` };
     } catch (error) {
         console.error("Ha surgido este error en models de cart: " + error);
         return error;

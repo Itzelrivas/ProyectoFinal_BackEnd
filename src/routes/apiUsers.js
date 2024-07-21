@@ -51,7 +51,6 @@ router.post('/:uid/documents', upload.array('files'), addFilesController);
 router.get('/edit', adminAuth, editUsersController)
 
 //Ruta para cambiar a un role especifico un usuario con su _id. 
-//AGREGAR EL AUTH PARA SOLO AMDIN
 router.post("/changeRole/:uid/:urole", adminAuth, changeRolGeneralController)
 
 //Ruta que elimina un user mediante el _id

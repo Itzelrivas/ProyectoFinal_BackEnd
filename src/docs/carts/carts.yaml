@@ -2,6 +2,7 @@ paths:
   /api/carts:
     get:
       summary: Obtiene todos los carritos de la base de datos.
+      description: Para acceder a esta ruta, tiene que loguearse un usuario con role ADMIN.
       tags:
         - Carts
       responses:
@@ -340,6 +341,7 @@ paths:
   /api/carts/{cid}/purchase:
     post:
       summary: Crea un ticket que se manda al correo registrado con el carrito y finaliza la compra de un carrito específico mediante su id.
+      description: Para acceder a esta ruta, tiene que loguearse un usuario con role ADMIN.
       tags:
         - Carts
       parameters:

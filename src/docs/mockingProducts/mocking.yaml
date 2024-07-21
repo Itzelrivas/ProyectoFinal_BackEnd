@@ -1,0 +1,85 @@
+paths:
+  /mockingproducts:
+    get:
+      summary: Obtenemos 100 productos creados con faker.
+      description: Para acceder a esta ruta, tiene que loguearse un usuario con role ADMIN.
+      tags:
+        - Mocking Products
+      responses:
+        '200':
+          description: Lista de productos obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  payload:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: ObjectId
+                          example: "26c82fcb57ad6a51d35ce267"
+                        id:
+                          type: string
+                          example: "1234"
+                        title:
+                          type: string
+                          example: "Producto de prueba"
+                        description:
+                          type: string
+                          example: "Descripción del producto"
+                        code:
+                          type: string
+                          example: "ABC_04"
+                        price:
+                          type: number
+                          example: 1000
+                        stock:
+                          type: number
+                          example: 4
+                        category:
+                          type: string
+                          example: "Categoría de prueba"
+                        image:
+                          type: string
+                          example: "https://loremflickr.com/640/480/cats"
+                        status:
+                          type: string
+                          example: "true"
+                        owner:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              example: "Owner test"
+                            email:
+                              type: string
+                              example: "owner@hotmail.com"
+                            role:
+                              type: string
+                              example: "premium"
+        '403':
+          description: Acceso denegado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  error:
+                    type: string
+                    example: "Acceso denegado. Debes tener role admin para realizar esta acción."
+        '500':
+          description: Error del servidor
+          content:
+            text/html:
+              schema:
+                type: string
+                example: "<h2 style=\"color: red\">¡Oh oh! Ha surgido un error, por lo tanto, no se pudo obtener los productos.</h2>"

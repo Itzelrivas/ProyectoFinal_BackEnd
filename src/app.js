@@ -37,8 +37,24 @@ app.use(express.urlencoded({ extended: true }));
 //Uso de loggers
 app.use(addLogger)
 
+//Helpers de handlebars
+const hbs = handlebars.create({
+    helpers: {
+        calculateTotal: function(products) {
+            let total = 0;
+            if (Array.isArray(products)) {
+                products.forEach(product => {
+                    total += product.price * product.quantity;
+                });
+            }
+            return total;
+        }
+    }
+});
+
 //Uso de vista de plantillas
-app.engine('handlebars', handlebars.engine());
+//app.engine('handlebars', handlebars.engine());
+app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 app.set('views', __dirname + "/src/views");
 

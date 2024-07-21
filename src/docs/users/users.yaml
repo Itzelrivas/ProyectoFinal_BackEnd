@@ -1,7 +1,8 @@
 paths:
   /api/users:
     get:
-      summary: Obtiene todos los usuarios registrados en la base de datos. Solo tienen aceso a esta ruta usuarios con role admin o premium.
+      summary: Obtiene todos los usuarios registrados en la base de datos. 
+      description: Para acceder a esta ruta, tiene que loguearse un usuario con role ADMIN.
       tags:
         - Users
       responses:
@@ -18,7 +19,8 @@ paths:
         "500":
           description: Error inesperado en el server, no se puede manejar el proceso
     delete:
-      summary: Elimina todos los usuarios que su última conexión fue hace al menos dos días. Solo tienen aceso a esta ruta usuarios con role admin o premium.
+      summary: Elimina todos los usuarios que su última conexión fue hace al menos dos días. 
+      description: Para acceder a esta ruta, tiene que loguearse un usuario con role ADMIN.
       tags:
         - Users
       responses:
@@ -31,6 +33,7 @@ paths:
   /api/users/inactive:
     get:
       summary: Obtiene todos los usuarios que su última conexión fue hace al menos dos días.
+      description: Para acceder a esta ruta, tiene que loguearse un usuario con role ADMIN.
       tags:
         - Users
       responses:
@@ -43,6 +46,7 @@ paths:
   /api/users/premium/{_id}:
     get:
       summary: Cambia el role de usuario a premium o de premium a usuario. El role solo cambia a premium si el usuario tiene subidos los papeles correspondientes a Identificación, Comprobante de domicilio y Comprobante de estado de cuenta.
+      description: Para acceder a esta ruta, tiene que loguearse un usuario con role USER o PREMIUM.
       tags:
         - Users
       parameters:
@@ -115,6 +119,7 @@ paths:
   /api/users/changeRole/{uid}/{urole}:
     post:
       summary: Cambia el rol de un usuario específico mediante su _id.
+      description: Para acceder a esta ruta, tiene que loguearse un usuario con role ADMIN.
       tags:
         - Users
       parameters:
@@ -170,6 +175,7 @@ paths:
   /api/users/deleteUser/{uid}:
     delete:
       summary: Elimina un usuario de la base de datos utilizando su _ID.
+      description: Para acceder a esta ruta, tiene que loguearse un usuario con role ADMIN.
       tags:
         - Users
       parameters:

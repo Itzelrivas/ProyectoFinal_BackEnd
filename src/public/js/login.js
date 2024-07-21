@@ -36,7 +36,17 @@ form.addEventListener('submit', e => {
             confirmButtonText: 'Aceptar',
             backdrop: 'rgba(95, 158, 160, 0.348)'
         }).then(() => {
-            window.location.replace('/handlebars/products');
+            Swal.fire({
+                title: '¡Importantee!',
+                text: 'Estas son algunas de las funciones que puedes realizar según tu role :).',
+                imageUrl: '/img/bannerRoles.png', 
+                imageAlt: 'Roles',
+                confirmButtonText: 'Aceptar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.replace('/handlebars/products');
+                }
+            });
         });
     }).catch(error => {
         console.error('Ha surgido un error:', error);

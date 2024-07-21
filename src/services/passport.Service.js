@@ -4,7 +4,8 @@ import passportLocal from 'passport-local';
 import GitHubStrategy from 'passport-github2';
 import { userModel }from '../models/users/user.model.js';
 import { cartsModel } from '../models/carts/carts.model.js'; 
-import { createHash, isValidPassword } from '../../utils.js'; //Funciones de encriptacion que creamos con bcrypt
+//Funciones de encriptacion que creamos con bcrypt
+import { createHash, isValidPassword } from '../../utils.js'; 
 //Variables de entorno
 import config from '../config/config.js'
 import { createCartService } from './carts.Service.js';
@@ -30,35 +31,20 @@ export const initializePassport = () => {
 					console.log ("El usuario ya existe!!");
 					return done(null, false)
 				} else{
-                    //Verificamos que exista el carrito asociado segun su id, en caso de tenerlo y si no se crea un nuevo carrito
-                    //const cartId = cart//request.body.cart;
-                    //console.log('aqui andamos:')
-                    //console.log(cartId)
                     let idCart
-                    //if(/*cartId !== undefined || */cartId){
-                        /*const cart = await cartsModel.findOne({ id: cartId });
-                        if (!cart) {
-                            console.log("El carrito no existe!");
-                            return done("El carrito no existe!");
-                        }else{
-                            idCart = cart._id
-                        }
-                    }
-                    else{*/
-                        const newCart = {
-                            products: []
-                        };
-                        const createdCart = await createCartService(newCart);
-                        const cart = await cartsModel.findOne({ id: newCart.id });
-                        console.log(createdCart)
-                        idCart = cart._id
-                    //}
+                    
+                    //Asignamos un carrito
+                    const newCart = {
+                        products: []
+                    };
+                    const createdCart = await createCartService(newCart);
+                    const cart = await cartsModel.findOne({ id: newCart.id });
+                    console.log(createdCart)
+                    idCart = cart._id
 
                     //Asignamos roles
                     let roleFin 
-                    if(email === 'adminCoder@coder.com' && password === 'adminCod3r123'){
-                        roleFin = 'admin'
-                    }else if(!role){
+                    if(!role){
                         roleFin='user'
                     }else{
                         roleFin=role
@@ -74,7 +60,6 @@ export const initializePassport = () => {
 						email, 
 						age,
 						password: createHash(password), //Guardamos la password hasheada
-                        //cart: cart._id, 
                         cart: idCart,
                         role: roleFin, 
                         last_connection: last_connection
@@ -89,7 +74,6 @@ export const initializePassport = () => {
     ))
 
 
-    //let rolCurrentUser
     //Estrategia para iniciar sesión normal ✅
     passport.use('login', new localStrategy(
 		{passReqToCallback: true, usernameField: 'email'},
@@ -122,8 +106,7 @@ export const initializePassport = () => {
                 //Capturamos el rol
                 rolCurrentUser=user.role
 
-                //chicle y pega
-                 // Guardamos los datos del usuario en la sesión
+                // Guardamos los datos del usuario en la sesión
                 request.session.user = {
                     name: `${user.first_name} ${user.last_name}`,
                     email: user.email,
@@ -139,7 +122,6 @@ export const initializePassport = () => {
             }
 	    }
     ))
-
 
     //Estrategia para la serealización 
     passport.serializeUser((user, done) => {
@@ -171,18 +153,30 @@ export const initializePassport = () => {
                 console.log(user);
 
                 if (!user) {
-                    console.warn("User doesn't exists with username: " + profile._json.email);
+                    console.warn("User doesn't exists with email: " + profile._json.email);
 
-                    //Capturamos el rol
-                    rolCurrentUser=user.role
+                    //Asignamos un carrito
+                    let idCart
+                    const newCart = {
+                        products: []
+                    };
+                    const createdCart = await createCartService(newCart);
+                    const cart = await cartsModel.findOne({ id: newCart.id });
+                    console.log(createdCart)
+                    idCart = cart._id
+
+                    //Asignamos la hora
+                    let last_connection = new Date()
 
                     let newUser = {
-                        first_name: profile._json.name, //Lo puse asi porque estoy registrada bien raramente en GitHub y tengo el name (y el correo) en nulo jajaja
-                        last_name: '',
-                        age: 18,
+                        first_name: profile._json.name, 
+                        last_name: ' ',
                         email: profile._json.email,
+                        age: 18,
                         password: '',
+                        cart: idCart,
                         role: 'user',
+                        last_connection: last_connection,
                         loggedBy: 'GitHub'
                     }
 

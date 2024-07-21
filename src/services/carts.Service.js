@@ -1,4 +1,4 @@
-import { getCarts, newCart, getCartById, getCartByIdPopulation, addProductToCart, deleteProductToCart, deleteProductsCart, updateCantProducts, updateProductsCart, addProductToCartBy_Id, getCartBy_IdPopulation, purchaseCart} from "../models/carts/cartsData.js";
+import { getCarts, newCart, getCartById, getCartByIdPopulation, addProductToCart, deleteProductToCart, deleteProductsCart, updateCantProducts, updateProductsCart, addProductToCartBy_Id, getCartBy_IdPopulation, purchaseCart, deleteCart} from "../models/carts/cartsData.js";
 
 //Obtenemos los carritos
 export const getCartsService = async () => {
@@ -78,4 +78,9 @@ export const purchaseCartService = async (cid, email) => {
         message: "Compra finalizada exitosamente",
         result
     };
+}
+
+//Eliminamos un cart de la base de datos
+export const deleteCartService = async (cart_id) => {
+    return await deleteCart(cart_id)
 }

@@ -94,7 +94,7 @@ paths:
                     example: "Error interno del servidor"
   /api/sessions/register:
     post:
-      summary: Registrar un nuevo usuario solicitando el nombre, apellido, correo, edad, contraseña y role del usuario.
+      summary: Registrar un nuevo usuario solicitando el nombre, apellido, correo, edad, contraseña y role del usuario. Para roles de admin y premium se pide una contraseña específica.
       tags:
         - Sessions
       requestBody:
@@ -156,6 +156,28 @@ paths:
                   message:
                     type: string
                     example: "Error al intentar registrar un nuevo usuario."
+  /api/sessions/logout:
+    get:
+      summary: Cerrar sesión de usuario logueado.
+      tags:
+        - Sessions
+      responses:
+        '201':
+          description: LogOut exitoso
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "LogOut exitoso :)"
+        '500':
+          description: Error del servidor
+          content:
+            text/html:
+              schema:
+                type: string
+                example: "<h2 style=\"color: red\">¡Oh oh! Ha surgido un error y no se pudo completar el logOut.</h2>"
+
+
 
 components:
   schemas:
@@ -180,6 +202,9 @@ components:
         role:
           type: string
           description: Rol del usuario (user, admin, premium)
+        specialPassword:
+          type: string
+          description: Contraseña específica para asignar role premium o admin (para user no se necesita).
       example:
         first_name: Usuario newUser
         last_name: Apellido newUser
@@ -187,3 +212,4 @@ components:
         age: 25
         password: password123
         role: user
+        specialPassword: ""

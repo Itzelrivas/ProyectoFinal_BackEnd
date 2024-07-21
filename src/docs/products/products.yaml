@@ -19,6 +19,7 @@ paths:
           description: Error inesperado en el servidor, no se pudo ejecutar el proceso.
     post:
       summary: Crear un nuevo producto.
+      description: Para acceder a esta ruta, tiene que loguearse un usuario con role PREMIUM o ADMIN.
       tags:
         - Products
       requestBody:
@@ -116,6 +117,7 @@ paths:
   /api/products/{pid}:
     put:
       summary: Actualiza toda la información de un producto específico según su id.
+      description: Para acceder a esta ruta, tiene que loguearse un usuario con role PREMIUM o ADMIN.
       tags:
         - Products
       parameters:
@@ -170,6 +172,7 @@ paths:
           description: Error inesperado en el servidor, no se pudo ejecutar el proceso.
     delete:
       summary: Elimina un producto específico mediante su id. Si el owner del producto tenia un role premium, se le avisará mediante un correo la situación.
+      description: Para acceder a esta ruta, tiene que loguearse un usuario con role ADMIN.
       tags:
         - Products
       parameters:

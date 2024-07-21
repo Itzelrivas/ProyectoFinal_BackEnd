@@ -126,16 +126,22 @@ faker.locale = 'es'; //Idioma de los datos.
 export const generateProduct = () => {
     const categories = ['pantalon', 'playera', 'vestido', 'bolsas', 'conjuntos', 'perfume']
     const status = ['true', 'false']
+    const roles = ['admin', 'premium', 'user'];
     return {
         _id: faker.database.mongodbObjectId(),
         id: faker.datatype.number({ min: 1, max: 10000 }),
         title: faker.commerce.productName(),
         description: faker.commerce.productDescription(),
-        code: faker.datatype.string({ length: 6, alpha: true }),
+        code: faker.random.alphaNumeric(6),
         price: faker.commerce.price(),
         stock: faker.random.numeric(1),
         category: categories[Math.floor(Math.random() * categories.length)],
         image: faker.image.image(),
         status: status[Math.floor(Math.random() * status.length)],
+        owner: {
+            name: faker.name.fullName(),
+            email: faker.internet.email(),
+            role: roles[Math.floor(Math.random() * roles.length)]
+        }
     }
 };

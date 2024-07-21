@@ -2,7 +2,6 @@ import { cartsModel } from "./carts.model.js";
 import { productsModel } from "../products/products.model.js";
 import { getTicket } from "../ticket/ticketsData.js";
 import { sendEmail } from "../email/emailData.js";
-//import { currentCart } from "../../services/passport.Service.js";
 
 const carts = cartsModel.find()
 
@@ -176,11 +175,7 @@ export const updateProductsCart = async (cartId, newProducts) => {
 //Finalizamos la compra products
 export const purchaseCart = async (id, email) =>{
     try {
-        console.log(id)
         const cart = await cartsModel.findOne({ id: id }).populate('products.product');
-        console.log("hola")
-        console.log(cart.products)
-        console.log("adios")
         if (!cart) {
             console.log("El carrito con el ID proporcionado no fue encontrado.");
             return;
@@ -193,17 +188,11 @@ export const purchaseCart = async (id, email) =>{
         // Iteramos sobre cada producto del carrito
         for (const product of cart.products) {
             let product_Id = product.product._id
-            console.log(product_Id) 
             let quantityProduct = parseInt(product.quantity)
-            console.log(quantityProduct)
             let productInDB = await productsModel.findOne({_id: product_Id})
-            console.log(productInDB)
             let idProduct = parseInt(productInDB.id)
-            console.log(idProduct)
             let realQuantity = parseInt(productInDB.stock)
-            console.log(realQuantity)
             let priceProduct = parseInt(productInDB.price)
-            console.log(priceProduct)
             if(quantityProduct<=realQuantity){
                 amount += quantityProduct*priceProduct
                 let newQuantity = realQuantity-quantityProduct
@@ -217,13 +206,11 @@ export const purchaseCart = async (id, email) =>{
                 await productsModel.findOneAndUpdate({_id: product_Id}, {stock: 0})
                 //Solo se guardan los products de los que no hay suficiente stock
                 let newQuantity = quantityProduct-realQuantity
-                console.log(newQuantity)
                 await updateCantProducts(id, idProduct, newQuantity)
                 //Pusheamos el id del product a mi array
                 productsLeft.push(idProduct)
             }
         }
-        console.log(amount)
  
         const ticket = await getTicket(amount, email)
         //Mandamos el ticket al email del usuario
@@ -235,3 +222,5 @@ export const purchaseCart = async (id, email) =>{
         return error;
     }
 }
+
+//Nos quedamos aqui intentando cambiar los console.log's por loggers

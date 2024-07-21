@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import config from '../../config/config.js' //Esto es para traerme las variables de entorno
+import config from '../../config/config.js' 
 
 //Configuración de transport
 const transporter = nodemailer.createTransport({

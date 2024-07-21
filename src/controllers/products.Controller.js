@@ -26,9 +26,8 @@ export const getProductsController = async (request, response) => {
 			response.send(products)
 		}
 	} catch (error) {
-		//console.error("Error al intentar acceder a los productos: " + error);
         request.logger.error(`Ha surgido este error: ${error}`)
-		return response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error.</h2>')
+		return response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error y no se pudo acceder a los productos.</h2>')
 	}
 }
 
@@ -53,9 +52,8 @@ export const getProductIdController = async (request, response) => {
 		}
 		return response.send({ msg: `El producto con el id=${productId} no existe.` })
 	} catch (error) {
-		//console.error(error)
         request.logger.error(`Ha surgido este error: ${error}`)
-		return response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error, por lo tanto, no se pudo mostrar lo solicitado.</h2>')
+		return response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error, por lo tanto, no se pudo mostrar el usuario solicitado.</h2>')
 	}
 }
 
@@ -69,9 +67,8 @@ export const getProduct_IdController = async (request, response) => {
         }
         return response.send({ msg: `El producto con el _id=${product_id} no existe.` })
     } catch (error) {
-        //console.error("Ha surgido este error: " + error)
         request.logger.error(`Ha surgido este error: ${error}`)
-		response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error, por lo tanto, no se pudo mostrar lo solicitado.</h2>')
+		response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error, por lo tanto, no se pudo mostrar el usuario solicitado.</h2>')
 	}
 }
 
@@ -81,17 +78,16 @@ export const getProductsLimitPaginated = async (request, response) => {
         let page = parseInt(request.query.page) || 1;
         let limit = parseInt(request.query.limit);
 
-        // Si limit no es un número válido o está vacío, asignarle el valor predeterminado de 10
+        //Si limit no es un número válido o está vacío, asignarle el valor predeterminado de 10
         if (!limit || isNaN(limit)) {
             limit = 10;
         }
 
         if (!request.query.hasOwnProperty('limit')) {
-            // Si limit no está presente en la consulta, utilizar la paginación
+            //Si limit no está presente en la consulta, utilizar la paginación
             let result = await getProductsPaginatedS(page);
-			//console.log(result)
             request.logger.debug(result)
-            // Actualizar los enlaces de paginación
+            //Actualizamos los enlaces de paginación
             result.prevLink = result.hasPrevPage ? `http://localhost:9090/handlebars/home?page=${result.prevPage}` : '';
             result.nextLink = result.hasNextPage ? `http://localhost:9090/handlebars/home?page=${result.nextPage}` : '';
             result.isValid = !(page <= 1 || page > result.totalPages);
@@ -110,7 +106,7 @@ export const getProductsLimitPaginated = async (request, response) => {
                 prevLink: result.hasPrevPage ? `http://localhost:9090/handlebars/home?page=${result.prevPage}` : null,
                 nextLink: result.hasNextPage ? `http://localhost:9090/handlebars/home?page=${result.nextPage}` : null
             };
-            console.log(responseObject)
+            request.logger.info(JSON.stringify(responseObject, null, 2))
             
             return response.render('home', {
                 style: "viewsHandlebars.css",
@@ -118,19 +114,17 @@ export const getProductsLimitPaginated = async (request, response) => {
                 user: request.session.user
             });
         } else {
-            // Si se proporciona un límite en la consulta, no se utiliza la paginación
             let products = await getProductsLimitedS(limit);
             return response.render('home', {
                 style: "viewsHandlebars.css",
                 result: {
                     docs: products,
-                    isValid: true // Se establece como válido ya que no hay paginación
+                    isValid: true 
                 }
             });
         }
 
     } catch (error) {
-        //console.error("Ha surgido este error: " + error);
         request.logger.error(`Ha surgido este error: ${error}`)
         response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error al obtener los productos.</h2>');
     }
@@ -160,14 +154,13 @@ export const getProductsSortController = async (request, response) => {
             prevLink: result.hasPrevPage ? `http://localhost:9090/handlebars/home/sort?page=${result.prevPage}` : null,
             nextLink: result.hasNextPage ? `http://localhost:9090/handlebars/home/sort?page=${result.nextPage}` : null
         };
-        console.log(responseObject)
+        request.logger.info(JSON.stringify(responseObject, null, 2))
 
         response.render('home', {
             style: "viewsHandlebars.css",
             result
         });
     } catch (error) {
-        //console.error("Ha surgido este error: " + error);
         request.logger.error(`Ha surgido este error: ${error}`)
         response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error al ordenar los productos.</h2>');
     }
@@ -199,14 +192,13 @@ export const getProductsCategoryCont = async (request, response) => {
             prevLink: result.hasPrevPage ? `http://localhost:9090/handlebars/home/search?category=${category}&page=${result.prevPage}` : null,
             nextLink: result.hasNextPage ? `http://localhost:9090/handlebars/home/search?category=${category}&page=${result.nextPage}` : null
         };
-        console.log(responseObject)
+        request.logger.info(JSON.stringify(responseObject, null, 2))
 
         response.render('home', {
             style: "viewsHandlebars.css",
             result
         });
     } catch (error) {
-        //console.error("Ha surgido este error: " + error);
         request.logger.error(`Ha surgido este error: ${error}`)
         response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error al ordenar los productos.</h2>');
     }
@@ -217,14 +209,12 @@ export const getProductsCategoryCont = async (request, response) => {
 export const getProductsRTController = async (request, response) => {
     try {
         let products = await getProductsRTService()
-        console.log(products)
-        // Renderizar la plantilla con los datos actualizados
+        //Renderizar la plantilla con los datos actualizados
         response.render('realTimeProducts', {
             style: "viewsHandlebars.css",
             products
         });
     } catch (error) {
-        //console.error("Ha surgido este error: " + error);
         request.logger.error(`Ha surgido este error: ${error}`)
         response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error al obtener los productos.</h2>');
     }
@@ -255,7 +245,7 @@ export const getProductsPaginatedButton = async (request, response) => {
             prevLink: result.hasPrevPage ? `http://localhost:9090/handlebars/products?page=${result.prevPage}` : null,
             nextLink: result.hasNextPage ? `http://localhost:9090/handlebars/products?page=${result.nextPage}` : null
         };
-        console.log(responseObject)
+        request.logger.info(JSON.stringify(responseObject, null, 2))
 
         return response.render('productsWithButton', {
             style: "viewsHandlebars.css",
@@ -263,13 +253,7 @@ export const getProductsPaginatedButton = async (request, response) => {
             user: request.session.user
         });
 
-        /*return response.render('productsWithButton', {
-            style: "viewsHandlebars.css",
-            result
-        });*/
-
     } catch (error) {
-        //console.error("Ha surgido este error: " + error);
         request.logger.error(`Ha surgido este error: ${error}`)
         response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error al mostrar los productos.</h2>');
     }
@@ -280,23 +264,10 @@ export const newProductController = async (request, response) => {
     try {
         let products = await getProductsService()
         let { title, description, code, price, stock, category} = request.body;
-
-        //chicle y pega
         price = Number(price);
         stock = Number(stock);
 
-        //if (!title || !description || !code || !price || !stock || !category) {
-            console.log(typeof title)
-            console.log(typeof description)
-            console.log(typeof code)
-            console.log(typeof price)
-            console.log(typeof stock)
-            console.log(typeof category)
-            //console.log(typeof owner)
-
         if(!title || !description || !code || !price || !stock || !category || typeof title !== "string" || typeof description !== "string" || typeof code !== "string" || typeof price !== "number" || typeof stock !== "number" || typeof category !== "string"){
-            console.log("hola1")
-
             if (request.files && request.files.length > 0) {
                 //Esto es para evitar que se guarden archivos si los parametros no estan completos
                 request.files.forEach(file => {
@@ -312,10 +283,8 @@ export const newProductController = async (request, response) => {
                     code: NErrors.INVALID_TYPES_ERROR
                 });
             } catch (err) {
-                console.error("Error al crear el custom error:", err);
+                request.logger.error("Error al crear el custom error:", err);
             }
-            //}
-            console.log("hola2")
 
             return response.status(400).send({ status: "error", msg: "¡Oh oh! No se han completado todos los campos requeridos." });
         }
@@ -334,24 +303,16 @@ export const newProductController = async (request, response) => {
         let categoryLC = category.toLowerCase()
 
         const status = true;
-        let thumbnailImages = request.files ? request.files.map(file => `/${file.filename}`) : [] // Formatear la ruta de la thumbnail
+        let thumbnailImages = request.files ? request.files.map(file => `/${file.filename}`) : [] //Formateamos la ruta de la thumbnail
 
-        /*//Asignamos valor a owner 🔴
-        let ownerFinal
-        if(owner.trim() === ""){
-            ownerFinal = 'admin'
-        }else{
-            ownerFinal = owner
-        }*/
-        //Asignamos los datos del owner
+        //Asignamos los valores para el parámetro owner
         let user = request.session.user
-        console.log(user)
+        request.logger.debug(user)
         const ownerData = {
             name: user.name,
             email: user.email,
             role: user.role
         };
-
 
         let body =  { id: idNewProduct, title, description, code, price, stock, category: categoryLC, thumbnail: thumbnailImages, status, owner: ownerData}
         //mongo
@@ -361,7 +322,6 @@ export const newProductController = async (request, response) => {
 
         return response.status(201).send({ status: "Success", msg: `Se ha creado un nuevo producto exitosamente con id=${idNewProduct} :)` });
 	} catch (error) {
-		//console.error(error);
         request.logger.error(`Ha surgido este error: ${error}`)
 		return response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error, por lo tanto, no se pudo crear un nuevo producto.</h2>');
 	}
@@ -391,7 +351,6 @@ export const updateProductController = async (request, response) => {
 
 		return response.send({ status: "Success", message: "Se ha actualizado el producto con éxito :)", data: products[productPosition] })
 	} catch (error) {
-		//console.error("Ha surgido este error: " + error)
         request.logger.error(`Ha surgido este error: ${error}`)
 		response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error, por lo tanto, no se pudo actualizar el producto.</h2>')
 	}
@@ -422,10 +381,10 @@ export const deleteProductController = async (request, response) => {
 					try {
 						fs.unlinkSync(imagePath);
 					} catch (error) {
-						console.error(`Error al eliminar ${imagePath}: ${error}`);
+						request.logger.error(`Error al eliminar ${imagePath}: ${error}`);
 					}
 				} else {
-					console.log(`${imagePath} no existe`);
+					request.logger.warning(`${imagePath} no existe`);
 				}
 			});
 		}
@@ -433,7 +392,7 @@ export const deleteProductController = async (request, response) => {
 		await deleteProductService(productId)
 		products = await getProductsService() //Mando los productos actualizados al socket
 
-		if (products.length === productsSize) { //Si no se elimino el user, mostramos el siguiente error:
+		if (products.length === productsSize) { //Si no se elimino el producto, mostramos el siguiente error:
 			return response.status(500).send({ status: "error", error: `¡oh oh! El producto con id=${productId} no se pudo borrar.` });
 		}
         
@@ -447,7 +406,6 @@ export const deleteProductController = async (request, response) => {
 
 		response.send({ status: "Success", message: `El producto con id=${productId} ha sido eliminado.` });
 	} catch (error) {
-		//console.error("Ha surgido este error: " + error)
         request.logger.error(`Ha surgido este error: ${error}`)
 		response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error, por lo tanto, no se pudo eliminar el producto.</h2>')
 	}

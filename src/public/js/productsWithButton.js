@@ -10,6 +10,7 @@ function addToCart(productId) {
         throw new Error('Error al agregar el producto al carrito');
     })
     .then(message => {
+        console.log(message)
         // Si la respuesta es "Producto agregado", muestra el mensaje
         if (message === 'Producto agregado') {
             console.log('Producto agregado al carrito');
@@ -20,7 +21,7 @@ function addToCart(productId) {
                 timer: 2000, 
                 showConfirmButton: false
             });
-        } else {
+        } else { //hasta aqui es la rpueba 
             // Si la respuesta es diferente, muestra el mensaje de error
             console.error('No se pudo agregar el producto al carrito:', message);
             Swal.fire({
@@ -31,9 +32,17 @@ function addToCart(productId) {
         }
     })
     .catch(error => {
+        //console.error('Error al agregar el producto al carrito:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Acceso denegado',
+            text: 'Solo los usuarios con role user o premium pueden agregar productos a su carrito.'
+        });
         console.error('Error al agregar el producto al carrito:', error);
     });
 }
+
+
 
 /*function addToCart(productId) {
     // Realiza una solicitud GET para obtener la información del producto
@@ -114,4 +123,8 @@ function userCart() {
 
 function chat(){
     window.location.href = '/handlebars/messages';
+}
+
+function editUsers(){
+    window.location.href = '/api/users/edit';
 }

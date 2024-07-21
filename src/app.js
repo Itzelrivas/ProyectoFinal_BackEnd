@@ -43,6 +43,17 @@ app.engine('handlebars', handlebars.engine());
 app.set('view engine', 'handlebars');
 app.set('views', __dirname + "/src/views");
 
+//chicle y pega para un boton
+// Registro del helper ifEquals
+/*const hbs = create({
+    defaultLayout: 'main',
+    helpers: {
+        ifEquals: function (arg1, arg2, options) {
+            return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
+        }
+    }
+});*/
+
 // Indicamos que vamos a trabajar con archivos estaticos
 app.use(express.static(__dirname + "/src/public"))//Antes solo estaba /public
 

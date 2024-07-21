@@ -102,9 +102,11 @@ export const premiumUserAuth = (request, response, next) => {
 	}
     const userRol = request.session.user.role
 	request.logger.info(userRol)
+
 	if (userRol === 'user' || userRol === 'premium') {
         next(); // Si el usuario es premium, permite que continúe con la solicitud
     } else {
+        console.log('hola')
         response.status(403).send('Acceso denegado. Debes tener role premium o user para realizar esta acción.');
     }
 };

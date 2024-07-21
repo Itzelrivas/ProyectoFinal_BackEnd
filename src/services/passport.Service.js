@@ -177,13 +177,12 @@ export const initializePassport = () => {
                     rolCurrentUser=user.role
 
                     let newUser = {
-                        first_name: profile._json.login, //Lo puse asi porque estoy registrada bien raramente en GitHub y tengo el name (y el correo) en nulo jajaja
+                        first_name: profile._json.name, //Lo puse asi porque estoy registrada bien raramente en GitHub y tengo el name (y el correo) en nulo jajaja
                         last_name: '',
                         age: 18,
                         email: profile._json.email,
                         password: '',
-                        role,
-                        cart: idCart,
+                        role: 'user',
                         loggedBy: 'GitHub'
                     }
 

@@ -1,17 +1,20 @@
-<div class="formsContainer" style="background-color: rgba(244, 204, 144, 0.719);">
+<div class="formsContainer" style="background-image: url('/img/fondoGeneral_PanchoRoss.png');">
     <h2 style="background-color: rgb(142, 8, 8); padding: 1.5%; color: white; text-align:center">¡Este link ha expirado!</h2>
-    <p style="text-align: center;">El tiempo de válidez de este link ha terminado. Si quieres que te llegue un nuevo link para reestablecer la contraseña, realiza lo siguiente:</p>
+    <p style="text-align: center; background-color: rgba(255, 223, 174, 0.716); margin-left: 5%; margin-right: 5%;">El tiempo de válidez de este link ha terminado. Si quieres que te llegue un nuevo link para reestablecer la contraseña, realiza lo siguiente:</p>
     <form id="loginForm" style="padding: 1.5%; text-align:center">
         <div class="lineForms">
-            <label>Email: </label>
+            <label style="background-color: rgba(255, 223, 174, 0.716); padding-left: 5%; padding-right: 5%;">Email: </label>
             <input name="email" id="emailInput" required>
         </div>
         <div>
-            <button type="button" class="button" id="sendNewLinkButton" style="background-color: rgb(69, 168, 160); width: 30%; font-size: 14px; margin: 2%; color: white"><b>Nuevo link</b></button>
+            <button type="button" class="button" id="sendNewLinkButton" style="background-color: rgb(94, 12, 12); width: 30%; font-size: 14px; margin: 2%; color: white"><b>Nuevo link</b></button>
         </div>
     </form>
-    <div id="responseMessage" style="text-align:center; margin-top: 20px;"></div>
+    <div id="responseMessage" style="text-align:center;"></div>
 </div>
+<footer>
+    <img src="/img/footer_PanchoRoss.png" alt="Pancho Ross">
+</footer>
 
 <script>
 document.getElementById('sendNewLinkButton').addEventListener('click', async function(event) {
@@ -29,7 +32,7 @@ document.getElementById('sendNewLinkButton').addEventListener('click', async fun
 
         const result = await response.text();
 
-        responseMessage.innerHTML = `<p>${result}</p>`;
+        responseMessage.innerHTML = `<p style="margin-bottom:0%; padding-bottom: 5%;"><b>${result}</b></p>`;
     } catch (error) {
         responseMessage.innerHTML = `<p style="color: red;">Error al enviar el nuevo enlace: ${error.message}</p>`;
     }

@@ -5,7 +5,18 @@ function purchaseCart() {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => response.text())
+    //.then(response => response.text())
+    .then(response => {
+        if (response.ok) {
+            return response.text();
+        } else if (response.status === 400) {
+            return response.json().then(data => {
+                throw new Error(data.message);
+            });
+        } else {
+            throw new Error('Error al procesar la compra');
+        }
+    })
     .then(data => {
         // Mostrar mensaje de confirmación usando SweetAlert
         /*Swal.fire({
@@ -36,7 +47,8 @@ function purchaseCart() {
         console.error('Error:', error);
         Swal.fire({
             title: 'Error',
-            text: 'Hubo un problema al procesar tu compra. Por favor, inténtalo de nuevo.',
+            //text: 'Hubo un problema al procesar tu compra. Por favor, inténtalo de nuevo.',
+            text: error.message,
             icon: 'error',
             confirmButtonText: 'OK'
         });

@@ -20,7 +20,7 @@ dotenv.config({
 
 dotenv.config();
 
-// Exportamos las variables de entorno
+//Exportamos las variables de entorno
 export default {
     port: process.env.PORT,
     mongoUrl: process.env.MONGO_URL,
@@ -30,6 +30,8 @@ export default {
     email: process.env.GMAIL_ACCOUNT,
     appEmailPass: process.env.GMAIL_APP_PASSWORD,
     mongoTest: process.env.MONGO_URL_TEST,
+    passwordAdmin: process.env.PASSWORD_ADMIN,
+    passwordPremium: process.env.PASSWORD_PREMIUM,
     environment: environment,
     useMongo: program.opts().mongo
 };

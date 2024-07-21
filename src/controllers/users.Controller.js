@@ -11,11 +11,9 @@ export const getCartUserController = async (request, response) => {
         if (!user) {
             return response.status(404).send(`El usuario con correo ${user_email} no se ha encontrado.`);
         }
-        //console.log("Se pudo acceder con exito al usuario.")
         request.logger.info("Se pudo acceder con exito al usuario.")
         response.send(user)
     } catch (error) {
-        //console.error("Ha surgido este error: " + error);
         request.logger.error(`Ha surgido este error: ${error}`)
         response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error y no se pueden mostrar el usuario.</h2>');
     }
@@ -38,7 +36,6 @@ export const loginUserController = async (request, response) => {
 //Obtenemos la info del usuario
 export const getInfoUser = async (request, response) => {
     const user = request.session.user
-
     request.logger.info(`Session: ${JSON.stringify(request.session, null, 2)}`)
     response.render('current', { user })
 }
@@ -53,27 +50,23 @@ export const failLogin = async (request, response) => {
     response.status(401).send({ error: "Failed to process login!" });
 }
 
-//Logout
+//Logout + cambio de last_connection + redirrección a handlebar para iniciar sesión
 export const logout = async (request, response) => {
-    //console.log("pruebaaa: ")
-    //console.log(request.session.user)
-
-    //prueba cambiando el last_connection
+    //Cambiamos el valor de last_connection
     let emailUser = request.session.user.email
     request.logger.info(emailUser)
     let time = new Date()
     await timeLogInService(emailUser, time)
-    //console.log(modifyUser)
 
     request.session.destroy(error => {
         if (error){
             response.json({error: "error logout", mensaje: "Error al cerrar la sesion"});
         }
-        response.status(201).redirect('/users/login');//no tenia el 201 lo del status
+        response.status(201).redirect('/users/login');
     });   
 }
 
-//chicle y pega
+//Ruta para solamente cerrar sesión + cambiar valor del last_connection
 export const justLogout = async (request, response) => {
     try {
         request.session.destroy(error => {
@@ -88,7 +81,7 @@ export const justLogout = async (request, response) => {
     }
 }
 
-//Actualizamos la contraseña
+//Actualizamos la contraseña de un usuario
 export const updatePasswordController = async (req, res) => {
     //Token generado
     const { token } = req.params;
@@ -107,7 +100,7 @@ export const updatePasswordController = async (req, res) => {
             try {
                 //Lógica para actualizar la contraseña
                 const result = await comparePasswordService(newPassword, userId)
-                console.log(result)
+                req.logger.debug(result)
                 if(result === false){
                 await updatePassword(userId, newPassword);
                 res.send('Contraseña actualizada exitosamente.');
@@ -115,12 +108,12 @@ export const updatePasswordController = async (req, res) => {
                     res.send('La contraseña no puede ser igual a la que tenias anteriormente.')
                 }
             } catch (error) {
-                console.error('Error al actualizar la contraseña:', error);
+                req.logger.error('Error al actualizar la contraseña:', error);
                 res.status(500).send('Ha ocurrido un error al actualizar la contraseña.');
             }
         }
     } catch (error) {
-        console.error('Token inválido o expirado:', error);
+        req.logger.error('Token inválido o expirado:', error);
         res.render('expiredLink')
     }
 };
@@ -140,16 +133,14 @@ export const sendEmailPasswordController = async (request, response) => {
 //Cambiamos el rol del usurio mediante su _id
 export const changeRolController = async (request, response) => {
     try {
-        // Extrae el _id del parámetro de la URL
         const {_id} = request.params;
-
         let user = await getUser_IdService(_id)
         let role = user.role
-        console.log(role)
+        request.logger.debug(role)
 
         //Solicitud de archivos 
         let documents = await documentsUserService(_id)
-        //console.log(documents)
+        
         //Verificamos si el campo documents tiene los documentos requeridos
         const requiredDocuments = ['Identificacion', 'Comprobante_de_domicilio', 'Comprobante_de_estado_de_cuenta'];
         const userDocuments = documents.map(doc => doc.name.split('.')[0]); //Eliminamos la extensión del nombre del archivo
@@ -182,12 +173,9 @@ export const changeRolController = async (request, response) => {
 //Agregamos archivos al parametro documents de un usuario según su id
 export const addFilesController = async (request, response) => {
     try {
-        //console.log("hola1")
         const userId = request.params.uid
         const files = request.files
-        //console.log("hola2")
         await uploadFilesService(userId, files);
-        //console.log("hola3")
         response.json({ message: 'Archivos subidos y usuario actualizado exitosamente' });
     } catch (error) {
         request.logger.error(`Ha surgido este error: ${error}`)
@@ -230,9 +218,7 @@ export const deleteInactiveUsersController = async (request, response) => {
 
 //Vista para eliminar, editar rol o ver usuarios
 export const editUsersController = async (request, response) =>{
-    response.render('usersEdit', {
-        //style: "viewsHandlebars.css"
-    })
+    response.render('usersEdit', {})
 }
 
 //Cambiamos el role a elección de un usuario específico
@@ -251,7 +237,7 @@ export const changeRolGeneralController = async (request, response) => {
         return response.status(200).send(`El role del usuario con _id: ${userId} ahora es ${userRole}`);
     } catch (error) {
         request.logger.error(`Error al cambiar el role del usuario: ${error}`);
-        response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error y no se pudieron eliminar los usuarios inactivos.</h2>');
+        response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error y no se pudo cambiar el role del usuario.</h2>');
     }
 }
 
@@ -267,6 +253,8 @@ export const deleteUserController = async (request, response) => {
         await deleteUserService(userId)
         return response.status(200).send(`El usuario con _id: ${userId} ha sido eliminado.`);
     } catch (error) {
-        
+        request.logger.error(`Error al eliminar un usuario: ${error}`);
+        response.status(500).send('<h2 style="color: red">¡Oh oh! Ha surgido un error y no se pudo eliminar al usuario.</h2>');
     }
 }
+

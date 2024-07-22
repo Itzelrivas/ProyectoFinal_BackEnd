@@ -2,7 +2,7 @@ import express from 'express';
 import { getProductsCategoryCont, getProductsLimitPaginated, getProductsPaginatedButton, getProductsRTController, getProductsSortController } from "../controllers/products.Controller.js";
 import { messagesController } from '../controllers/chat.Controller.js';
 import { getProductsCart, getProductsCartUser } from '../controllers/carts.Controller.js';
-import { userAuth } from '../../utils.js';
+import { premiumUserAuth } from '../../utils.js';
 
 const router = express.Router();
 
@@ -19,7 +19,7 @@ router.get("/home/search", getProductsCategoryCont)
 router.get("/realTimeProducts", getProductsRTController)
 
 //Ruta que nos muestra el chat solo a los que tengan un rol user
-router.get("/messages", userAuth, messagesController)
+router.get("/messages", premiumUserAuth, messagesController)
 
 //Ruta que nos muestra los productos con paginación y botón para agregar al carrito
 router.get("/products", getProductsPaginatedButton)

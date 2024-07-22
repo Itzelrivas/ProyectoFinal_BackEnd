@@ -112,10 +112,6 @@ export const githubCallbackController = (request, response, next) => {
     passport.authenticate('github', { failureRedirect: '/api/sessions/fail-login' })(request, response, async () => {
         const user = request.user;
         if(user){
-            // Asignamos roles si es necesario
-            /*if (user.email === 'adminCoder@coder.com') {
-                user.role = 'administrador';
-            }*/
 
             //Creamos la sesión del usuario
             request.session.user = {
